@@ -1,0 +1,10 @@
+metric,exp5,r1,delta,direction,metric_clean
+PSNR ↑,16.63,16.68,0.05,提升,PSNR
+SSIM ↑,0.7296,0.731,0.0014,提升,SSIM
+LPIPS ↓,0.2564,0.2546,-0.0018,提升,LPIPS
+CLIP-I ↑,0.905,0.9499,0.0449,大幅提升,CLIP-I
+DINO ↑,0.8895,0.8837,-0.0058,退化,DINO
+FID ↓,50.83,55.93,5.1,退化,FID
+Score_view ↑,0.7705,0.7828,0.0123,提升,Score_view
+Score_cons ↑,0.9709,0.9676,-0.0033,微降,Score_cons
+VIE Overall ↑,0.8649,0.8703,0.0054,提升,VIE Overall

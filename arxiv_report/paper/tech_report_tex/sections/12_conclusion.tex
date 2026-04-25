@@ -1,0 +1,8 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+This report presented a workflow-as-skill framework for autonomous synthetic dataset construction in object-level image editing. The framework grows out of a concrete manual-construction pain point: scene-aware synthetic data requires repeated observation, diagnosis, Blender parameter adjustment, regeneration, and validation. By making that loop explicit, the data engine turns manual tuning into a stateful workflow with staged artifacts, VLM/CV review, AI-agent actions, downstream probes, and explicit verdicts.
+
+The scene-aware object rotation case study validates the framework on its original motivating task. The workflow produces train-ready source-target pairs, performs a first feedback-guided weak-angle scaling round, and evaluates the result through a fixed LoRA probe and \spatialedit{} protocol. The evidence is mixed in a useful way: semantic and viewpoint metrics improve, while consistency and distribution metrics regress. The resulting \inspect{} verdict identifies render-quality gating as the immediate bottleneck rather than treating the round as either a clean success or a dead end.
+
+The broader conclusion is that dataset construction should be treated as an inspectable closed-loop system. The next step is to strengthen the inner loop with stricter render-quality gating and then test whether the same workflow can support further synthetic scaling and future mixed or real-data construction tasks.

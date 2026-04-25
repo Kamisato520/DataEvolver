@@ -1,0 +1,10 @@
+% In-domain 56-pair sanity check from the experiment record.
+\begin{tabular}{lrrrrrr}
+\toprule
+Probe & PSNR $\uparrow$ & SSIM $\uparrow$ & LPIPS $\downarrow$ & CLIP-I $\uparrow$ & DINO $\uparrow$ & FID $\downarrow$ \\
+\midrule
+Base model & 22.51 & 0.7859 & 0.2451 & 0.9253 & 0.8830 & 80.72 \\
+Public multi-angle LoRA & 12.49 & 0.5133 & 0.5701 & 0.8996 & 0.7672 & 142.41 \\
+Bright Directional LoRA (exp4) & \textbf{28.68} & \textbf{0.9165} & \textbf{0.0885} & \textbf{0.9620} & \textbf{0.9243} & \textbf{51.17} \\
+\bottomrule
+\end{tabular}

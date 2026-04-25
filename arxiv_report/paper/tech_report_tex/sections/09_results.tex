@@ -1,0 +1,113 @@
+\section{Results and Diagnostic Analysis}
+\label{sec:results}
+
+The validation results are organized around two questions. First, does scene-aware rotation data produce a useful editing probe compared with the unadapted base model and a public multi-angle LoRA? Second, once the best stable non-feedback configuration is selected, does the external feedback loop identify a useful scaling direction while preventing premature acceptance when regressions appear?
+
+\subsection{External Comparison and Non-Feedback Ablations}
+\label{sec:external-comparison}
+
+The external \spatialedit{} comparison shows that the non-feedback scene-aware rotation probes provide stronger reconstruction and perceptual behavior than the base model and the public multi-angle LoRA baseline. This comparison is not a strict same-training-recipe data ablation, because the base model is unadapted and the public LoRA uses its own training data. It is nevertheless an important benchmark comparison: the LoRA probes trained on our scene-aware rotation data outperform both external baselines on the traditional \spatialedit{} metrics.
+
+\begin{table}[t]
+\centering
+\small
+\caption{SpatialEdit-Bench traditional metrics for the base model, a public multi-angle LoRA, our non-feedback probes, and the first feedback-guided scaling round. The public LoRA is an external baseline rather than a controlled same-recipe ablation.}
+\label{tab:spatialedit-comparison}
+\resizebox{\linewidth}{!}{\input{tables/generated/spatialedit_comparison_booktabs}}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\linewidth]{figures/generated/spatialedit_external_relative_change.pdf}
+\caption{Direction-normalized external comparison against the unadapted base model. Positive bars indicate improvement after accounting for whether the metric is higher-is-better or lower-is-better.}
+\label{fig:spatialedit-external-relative}
+\end{figure}
+
+The ablation from \brightprobe{} to \semanticprobe{} clarifies why the latter is used as the feedback-loop baseline. The bright directional probe is the strongest non-feedback run on several pixel-level metrics, but the semantic-object prompt probe removes the visual bbox dependency and preserves comparable performance. It also achieves the best DINO and FID among the listed probes, which makes it a stable baseline for testing whether the outer loop can improve data rather than merely tune prompts.
+
+\begin{table}[t]
+\centering
+\small
+\caption{VLM judge scores on SpatialEdit-Bench. We report \scoreview{} and \scorecons{} because these columns are consistently comparable across the recorded runs; VIE Overall is used below only for the tracked semantic-object prompt baseline versus the first feedback-guided scaling round.}
+\label{tab:vlm-comparison}
+\input{tables/generated/vlm_score_comparison_booktabs}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.80\linewidth]{figures/generated/spatialedit_vlm_score_bars.pdf}
+\caption{VLM-based view and consistency scores across the external baselines and our probes. The feedback-guided round improves viewpoint scoring relative to the semantic baseline, while the slight consistency drop contributes to the \inspect{} verdict.}
+\label{fig:spatialedit-vlm-bars}
+\end{figure}
+
+The in-domain synthetic test set provides a sanity check for the same conclusion. On 56 held-out object-disjoint pairs from the same rendering family, the \brightprobe{} checkpoint is substantially stronger than the base model and the public multi-angle LoRA across all six reported metrics. This result is useful as a development check, while the external \spatialedit{} benchmark remains the primary cross-domain evaluation.
+
+\begin{table}[t]
+\centering
+\small
+\caption{In-domain 56-pair held-out sanity check. This table is used to show that the scene-aware synthetic data trains an effective rotation probe, but the external \spatialedit{} results remain the primary benchmark evidence.}
+\label{tab:indomain-sanity}
+\resizebox{\linewidth}{!}{\input{tables/generated/indomain_sanity_comparison_booktabs}}
+\end{table}
+
+\subsection{Feedback-Guided Weak-Angle Scaling}
+\label{sec:feedback-results}
+
+The first feedback-guided scaling round produces a mixed but informative result. Compared with the \semanticprobe{} baseline, \feedbackprobe{} R1 improves several semantic and viewpoint-oriented metrics, which suggests that targeted weak-angle data changes model behavior in the intended direction. At the same time, consistency and distribution metrics regress, which prevents automatic acceptance. This is the expected behavior of the two-loop framework: the outer loop identifies useful signal, while the verdict exposes that the inner loop's render-quality gating is insufficient.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Overall \spatialedit{} metrics for the \semanticprobe{} baseline and \feedbackprobe{} R1. Positive interpretation means the metric moved in the desired direction after the feedback-guided train-data intervention.}
+\label{tab:overall-metrics}
+\input{tables/generated/overall_metrics_booktabs}
+\end{table}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/generated/overall_signed_relative_change.pdf}
+\caption{Direction-normalized relative changes from the \semanticprobe{} baseline to \feedbackprobe{} R1. Positive bars indicate improvement after accounting for whether the metric is higher-is-better or lower-is-better.}
+\label{fig:overall-relative-change}
+\end{figure}
+
+The positive metrics indicate that weak-angle augmentation is not arbitrary noise. CLIP-I improves substantially, \scoreview{} rises, and VIE Overall increases. PSNR, SSIM, and LPIPS also move in the desired direction overall, though the magnitudes are small and should not be overinterpreted. These results support the outer-loop decision to look for targeted weak-angle data.
+
+The regressions explain why the dataset round should not be accepted as a clean success. DINO decreases, FID worsens, and \scorecons{} declines slightly. The comparison report also records a strong-angle DINO regression at 45 degrees, with a delta of \(-0.00994\) against a threshold of \(-0.008\). These regressions matter because object-level editing requires identity and appearance preservation, not only semantic or viewpoint alignment.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/generated/per_angle_diagnostic_deltas.pdf}
+\caption{Per-angle diagnostic deltas. The figure shows why \feedbackprobe{} R1 is mixed: viewpoint and pixel-fidelity signals improve in several angles, while DINO regressions expose consistency risk.}
+\label{fig:per-angle-deltas}
+\end{figure}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Per-angle diagnostic table for \scoreview{}, PSNR, and DINO.}
+\label{tab:per-angle-diagnostics}
+\input{tables/generated/per_angle_diagnostics_booktabs}
+\end{table}
+
+The render-quality diagnosis identifies the immediate bottleneck. All 20 newly added objects in \feedbackprobe{} R1 have \hybridscore{} below 0.6, with a median around 0.46. This indicates that the outer loop found a useful scaling direction, but the inner loop allowed low-quality synthetic objects to enter the training intervention. The appropriate verdict is therefore \inspect{}, not \continueverdict{}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/generated/dataset_scaling_and_quality.pdf}
+\caption{Dataset scaling and render-quality diagnosis. \feedbackprobe{} R1 increases the training set from 245 to 305 pairs but the added objects remain below the quality gate, exposing the next bottleneck.}
+\label{fig:dataset-quality}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\linewidth]{figures/generated/r1_bootstrap_hybrid_convergence.pdf}
+\caption{Bootstrap hybrid-score trajectories for the objects added by \feedbackprobe{} R1. The quality threshold at 0.6 is not reached by the new object set, motivating stricter render-quality gating before future merge decisions.}
+\label{fig:hybrid-convergence}
+\end{figure}
+
+\subsection{Why \inspect{} Is Not Failure}
+\label{sec:inspect-not-failure}
+
+The \inspect{} verdict is a contribution of the workflow rather than a sign that the workflow failed. In a traditional ad-hoc dataset pipeline, a mixed data round is often just wasted time: some metrics improve, others regress, and the builder has little guidance about what to fix next. In this workflow, the same mixed result becomes actionable evidence. The system indicates that weak-angle scaling is promising, but that render-quality gating, asset regeneration, and category-aware rendering priors must be improved before further scaling.
+
+This interpretation preserves both sides of the evidence. \feedbackprobe{} R1 is not a full success because consistency and distribution metrics regress. It is also not a failure because it identifies a useful data direction and a concrete quality bottleneck. The value of the workflow is that it turns this ambiguity into a routed next action.

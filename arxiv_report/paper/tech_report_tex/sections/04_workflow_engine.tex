@@ -1,0 +1,40 @@
+\section{Workflow-as-Skill Data Engine}
+\label{sec:workflow}
+
+The proposed system is a workflow-as-skill data engine. It replaces a loose script chain with a reusable, stateful, and inspectable procedure that turns a dataset request into staged artifacts, feedback signals, actions, and verdicts. In the current formulation, the skill can be written as:
+
+\begin{equation}
+\label{eq:skill}
+\skilltuple.
+\end{equation}
+
+\emph{Stages} are the ordered construction modules and the artifacts they must produce. \emph{Controller} is the AI agent or workflow manager that tracks state, routes samples, edits scripts, adjusts parameters, and decides which stage should run next. \emph{Review} contains automatic CV signals, VLM assessments, human-readable traces, and downstream validation metrics. \emph{Verdict} maps the observed evidence into actions such as \continueverdict{}, \inspect{}, \regenerate{}, \rejectverdict{}, \stoporrevert{}, or \nosignal{}.
+
+This formalization is deliberately lightweight. It is not intended to prove dataset correctness. Its purpose is to make the operational contract explicit: every stage emits inspectable artifacts, every artifact remains attached to persistent state, every review signal can influence routing, and every construction round ends with a decision that prevents ambiguous interpretation.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Operational contract of the workflow-as-skill data engine.}
+\label{tab:operational-contract}
+\begin{tabularx}{\linewidth}{lX}
+\toprule
+Component & Contract \\
+\midrule
+Stage outputs & Construction modules emit prompts, masks, meshes, renders, review traces, train pairs, checkpoints, and comparison reports that can be inspected or reused. \\
+Controller actions & The controller routes samples, adjusts parameters, edits workflow code when needed, triggers rerendering or regeneration, and manages state across rounds. \\
+Review signals & Quality is assessed through automatic CV signals, VLM feedback during construction, and downstream benchmark behavior after training. \\
+Feedback bounds & Updates remain bounded to actions such as rerendering, regenerating, filtering, rejecting, or delaying acceptance. \\
+Verdict logic & A round is accepted only if useful improvements do not trigger regression guards; mixed evidence is routed to \inspect{}. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The value of this abstraction is traceability. A dataset engine should not only produce examples; it should explain why those examples are trustworthy enough to enter training. Persistent state makes failures traceable, review signals make quality visible, and verdicts make iteration decisions explicit. Downstream training remains important, but it functions as a validation probe for the data engine rather than the main method.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.98\linewidth]{figures/generated/overall_pipeline.pdf}
+\caption{Overall workflow-as-skill data engine. A dataset request is converted into staged artifacts, reviewed by VLM/CV signals, routed through explicit verdicts, and validated by downstream probes rather than silently merged into training data.}
+\label{fig:workflow-skill}
+\end{figure}

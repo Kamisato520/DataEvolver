@@ -1,0 +1,17 @@
+\section{Related Work}
+\label{sec:related}
+
+\paragraph{Instruction-guided image editing.}
+InstructPix2Pix \cite{brooks2023instructpix2pix} and MagicBrush \cite{zhang2023magicbrush} established a modern paradigm of natural-language image editing with paired source-instruction-target supervision. Our work targets the upstream question of how such pairs are produced for object-level geometric edits.
+
+\paragraph{Synthetic data factories.}
+DatasetGAN \cite{zhang2021datasetgan} and OmniGen \cite{xiao2024omnigen} demonstrate that generative models can fabricate task-specific visual data. We extend this line by treating fabrication as a stateful workflow with explicit verdict gating, rather than a one-shot pass.
+
+\paragraph{VLM-as-judge and feedback-driven scaling.}
+ImageReward \cite{xu2023imagereward} uses a learned reward model to score generated images, and VIEScore \cite{ku2024viescore} applies a VLM as a structured evaluator for conditional image synthesis. Our work adopts a similar evaluator role, but places it inside a dataset-construction workflow where review signals route regeneration and augmentation decisions.
+
+\paragraph{3D-aware view synthesis.}
+Zero-1-to-3 \cite{liu2023zero1to3} uses rendered object data to train novel-view diffusion. Our pipeline shares the render-then-train recipe but inserts a VLM quality gate so that low-quality 3D reconstructions are diagnosed before they pollute downstream supervision.
+
+\paragraph{Self-improving training pipelines.}
+STaR \cite{zelikman2022star} and Self-Rewarding Language Models \cite{yuan2024selfrewarding} popularized iterative self-improvement loops in NLP. The dual-loop design here ports a similar template to a multi-stage visual data engine, where the judge is a multimodal evaluator and the actions are concrete pipeline-stage operations rather than token-level generations.

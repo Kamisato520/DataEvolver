@@ -1,0 +1,10 @@
+\section{Discussion: Generalization and Boundaries}
+\label{sec:discussion}
+
+The framework-first view separates the data-construction method from the rotation case study. The broader idea is a reusable data engine for object-level editing tasks that require controlled changes and preserved invariants. The specific yaw contract does not transfer automatically to other tasks, but the workflow structure can: staged artifact construction, review, bounded feedback actions, downstream validation, and explicit verdicts.
+
+This generalization must be stated cautiously. The workflow does not automatically solve resizing, repositioning, material editing, insertion, pose editing, or real-data collection. Each task must define its own change/invariance contract, artifact schema, quality signals, action space, and acceptance logic. The framework provides a disciplined way to express those requirements and inspect whether the resulting dataset satisfies them.
+
+The next extension path is mixed or real-data construction. A future version could use VLM feedback to review collected real samples, identify missing coverage or quality issues, and convert downstream weaknesses into either synthetic augmentation plans or real-data collection plans. The same quality-gating logic could then apply across data sources. This report does not claim that the system already solves real-data construction; it identifies a plausible extension of the same closed-loop abstraction.
+
+The practical lesson is that quality gates belong inside the data engine. If low-quality samples can enter training merely because they were generated, scaling becomes unsafe. The next version of the workflow should treat render quality, asset integrity, view-instruction consistency, and category-aware rendering priors as first-class acceptance conditions.

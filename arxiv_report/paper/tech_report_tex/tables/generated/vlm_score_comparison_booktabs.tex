@@ -1,0 +1,12 @@
+% VLM judge comparison from experiment logs and current exp5/R1 VIEScore CSV-derived reports.
+\begin{tabular}{lrr}
+\toprule
+Probe & Score\_view $\uparrow$ & Score\_cons $\uparrow$ \\
+\midrule
+Base model & 0.7746 & 0.9020 \\
+Public multi-angle LoRA & 0.7234 & 0.8658 \\
+Bright Directional LoRA (exp4) & 0.7746 & 0.9682 \\
+Semantic-Object Prompt LoRA (exp5) & 0.7705 & \textbf{0.9709} \\
+Feedback-Guided Scaling R1 & \textbf{0.7828} & 0.9676 \\
+\bottomrule
+\end{tabular}

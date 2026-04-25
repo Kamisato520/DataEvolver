@@ -1,0 +1,10 @@
+\section{Limitations and Future Work}
+\label{sec:limitations}
+
+The current validation is an initial single-round \inspect{} case. It shows that the framework can expose useful signal and harmful noise, but it does not prove that the closed-loop system is fully solved or robust across repeated scaling rounds. Additional rounds with stronger inner-loop quality gates are needed to test whether the identified bottleneck can be removed.
+
+Synthetic asset quality remains the immediate boundary. The objects added by the first feedback-guided scaling round fall below the desired hybrid-score threshold, making the round valuable as a diagnostic case but weak as a clean scaling result. The next concrete step is to add render-quality gating before export or train-set merging, regenerate or reject low-quality synthetic assets, and improve category-aware rendering priors so that new object classes do not inherit inappropriate lighting, material, or scale assumptions.
+
+The framework also needs validation beyond scene-aware rotation. Future tasks should not assume that the rotation-specific rendering contract transfers directly. Each task should define its own transformation, invariants, review signals, and verdict logic. Mixed synthetic/real-data settings are especially important future work, because they would test whether the same workflow can guide both synthetic augmentation and real-data collection.
+
+Several release artifacts remain incomplete for a public technical-report package. Qualitative grids, pipeline diagrams, failure-case figures, loss curves, and completed checkpoint hashes are not yet included. Angle-label consistency also requires care because historical notes use different labels for some angle slots; final per-angle tables should be regenerated from a single authoritative script.

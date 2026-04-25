@@ -1,0 +1,48 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment
+.env
+
+# Project specific - generated data
+*.log
+*.zip
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.safetensors
+*.bin
+*.pth
+*.pt
+*.ckpt
+*.onnx
+*.h5
+*.pb
+*.msgpack
+*.tgz
+*.tar.gz
+
+# Blender
+*.blend1
+*.blend2
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Conda
+env/
