@@ -5,9 +5,11 @@ Reads pipeline/data/prompts.json, outputs pipeline/data/images/{id}.png
 
 import argparse
 import glob
+import hashlib
 import json
 import os
 import sys
+import time
 import torch
 
 
@@ -26,10 +28,20 @@ def load_prompts(path=PROMPTS_PATH, ids=None):
     return prompts
 
 
+def _make_obj_seed(obj_id: str, run_salt: int) -> int:
+    digest = hashlib.sha256(f"{obj_id}:{run_salt}".encode("utf-8")).hexdigest()
+    return int(digest[:10], 16) % (2**31)
+
+
 def generate_images(prompts, device="cuda:0", height=1024, width=1024,
                     num_steps=30, skip_existing=True, output_dir=IMAGES_DIR,
-                    seed_base=42):
+                    seed_base=None):
     """Load Qwen-Image-2512 and generate images for all prompts."""
+    if seed_base is None:
+        seed_base = int(time.time() * 1000) % (2**31)
+        print(f"[Stage 2] Auto seed_base={seed_base}  (pass --seed-base to reproduce)")
+    else:
+        print(f"[Stage 2] Fixed seed_base={seed_base}")
     os.makedirs(output_dir, exist_ok=True)
 
     # Check which objects already have images
@@ -83,6 +95,7 @@ def generate_images(prompts, device="cuda:0", height=1024, width=1024,
         print(f"[Stage 2] ({i+1}/{len(prompts)}) Generating: {obj['name']} ...")
 
         try:
+            obj_seed = _make_obj_seed(obj["id"], seed_base)
             with torch.no_grad():
                 result = pipe(
                     prompt=obj["prompt"],
@@ -91,7 +104,7 @@ def generate_images(prompts, device="cuda:0", height=1024, width=1024,
                     width=width,
                     num_inference_steps=num_steps,
                     cfg_scale=7.5,
-                    seed=seed_base + i,
+                    seed=obj_seed,
                 )
             if isinstance(result, list):
                 result = result[0]
@@ -127,8 +140,8 @@ def main():
     parser.add_argument("--height", type=int, default=1024)
     parser.add_argument("--width", type=int, default=1024)
     parser.add_argument("--steps", type=int, default=30)
-    parser.add_argument("--seed-base", type=int, default=42,
-                        help="Base seed for deterministic regeneration runs")
+    parser.add_argument("--seed-base", type=int, default=None,
+                        help="Base seed for reproducibility (default: auto-randomize)")
     parser.add_argument("--no-skip", action="store_true", help="Re-generate even if file exists")
     parser.add_argument("--prompts-path", default=PROMPTS_PATH, help="Path to prompts.json")
     parser.add_argument("--output-dir", default=IMAGES_DIR, help="Where to write generated RGB images")
