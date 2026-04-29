@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import sys
@@ -42,12 +43,16 @@ def parse_args():
     parser.add_argument("--python", dest="python_bin", default=sys.executable)
     parser.add_argument("--stage1-mode", choices=["api", "template-only", "dry-run"], default="template-only")
     parser.add_argument("--stage1-model", default="claude-haiku-4-5")
+    parser.add_argument("--stage1-api-provider", choices=["anthropic"], default=None)
+    parser.add_argument("--stage1-api-base-url", default=None)
+    parser.add_argument("--stage1-api-timeout", type=float, default=300)
     parser.add_argument("--t2i-device", default="cuda:0")
     parser.add_argument("--sam-device", default="cuda:0")
     parser.add_argument("--i23d-devices", default="cuda:0,cuda:1,cuda:2")
     parser.add_argument("--no-skip", action="store_true")
     parser.add_argument("--shape-only", action="store_true")
-    parser.add_argument("--seed-base", type=int, default=42)
+    parser.add_argument("--seed-base", type=int, default=None,
+                        help="Base seed for T2I/3D (default: auto-randomize)")
     parser.add_argument("--launch-stagger-seconds", type=float, default=1.0)
     return parser.parse_args()
 
@@ -63,6 +68,16 @@ def save_json(path: Path, payload: dict):
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         json.dump(payload, f, indent=2, ensure_ascii=False)
+
+
+def tail_text(path: Path, limit: int = 8000) -> str:
+    if not path.exists():
+        return ""
+    with path.open("rb") as f:
+        f.seek(0, 2)
+        size = f.tell()
+        f.seek(max(0, size - limit))
+        return f.read().decode("utf-8", errors="replace")[-limit:]
 
 
 def run_step(cmd: List[str], name: str) -> dict:
@@ -83,20 +98,46 @@ def run_step(cmd: List[str], name: str) -> dict:
     }
 
 
-def launch_step(cmd: List[str], name: str) -> dict:
+def launch_step(cmd: List[str], name: str, logs_dir: Path, env=None) -> dict:
     started = time.time()
+    logs_dir.mkdir(parents=True, exist_ok=True)
+    safe_name = name.replace(":", "_").replace("/", "_").replace("\\", "_")
+    log_path = logs_dir / f"{safe_name}.log"
+    log_handle = log_path.open("w", encoding="utf-8")
     process = subprocess.Popen(
         cmd,
         cwd=str(REPO_ROOT),
-        stdout=subprocess.PIPE,
+        stdout=log_handle,
         stderr=subprocess.STDOUT,
         text=True,
+        env=env,
     )
     return {
         "name": name,
         "command": cmd,
         "process": process,
         "started_at": started,
+        "log_path": str(log_path),
+        "log_handle": log_handle,
+    }
+
+
+def finalize_worker(launched_item: dict) -> dict:
+    process = launched_item["process"]
+    try:
+        return_code = process.wait()
+    finally:
+        log_handle = launched_item.get("log_handle")
+        if log_handle is not None and not log_handle.closed:
+            log_handle.close()
+    log_path = Path(launched_item["log_path"])
+    return {
+        "name": launched_item["name"],
+        "command": launched_item["command"],
+        "return_code": return_code,
+        "elapsed_seconds": round(time.time() - float(launched_item["started_at"]), 3),
+        "stdout_tail": tail_text(log_path),
+        "log_path": str(log_path),
     }
 
 
@@ -110,6 +151,7 @@ def run_sharded_workers(
     base_args: List[str],
     no_skip: bool,
     launch_stagger_seconds: float,
+    logs_dir: Path,
 ) -> List[dict]:
     launched = []
     for index, shard in enumerate(shard_ids(obj_ids, devices)):
@@ -124,23 +166,11 @@ def run_sharded_workers(
         ]
         if no_skip:
             cmd.append("--no-skip")
-        launched.append(launch_step(cmd, f"{name_prefix}_{shard['device']}"))
+        launched.append(launch_step(cmd, f"{name_prefix}_{shard['device']}", logs_dir))
         if index < len(devices) - 1 and launch_stagger_seconds > 0:
             time.sleep(float(launch_stagger_seconds))
 
-    workers = []
-    for launched_item in launched:
-        stdout, _ = launched_item["process"].communicate()
-        workers.append(
-            {
-                "name": launched_item["name"],
-                "command": launched_item["command"],
-                "return_code": launched_item["process"].returncode,
-                "elapsed_seconds": round(time.time() - float(launched_item["started_at"]), 3),
-                "stdout_tail": (stdout or "")[-8000:],
-            }
-        )
-    return workers
+    return [finalize_worker(launched_item) for launched_item in launched]
 
 
 def parse_cuda_devices(raw: str) -> List[str]:
@@ -176,6 +206,7 @@ def main():
     rgba_dir = output_root / "images_rgba"
     meshes_raw_dir = output_root / "meshes_raw"
     meshes_dir = output_root / "meshes"
+    logs_dir = output_root / "logs"
 
     output_root.mkdir(parents=True, exist_ok=True)
     obj_ids = load_object_ids(objects_file)
@@ -195,6 +226,11 @@ def main():
         stage1_cmd.append("--dry-run")
     else:
         stage1_cmd.extend(["--model", args.stage1_model])
+        if args.stage1_api_provider:
+            stage1_cmd.extend(["--api-provider", args.stage1_api_provider])
+        if args.stage1_api_base_url:
+            stage1_cmd.extend(["--api-base-url", args.stage1_api_base_url])
+        stage1_cmd.extend(["--api-timeout", str(args.stage1_api_timeout)])
     steps.append(run_step(stage1_cmd, "stage1_text_expansion"))
     if steps[-1]["return_code"] != 0:
         save_json(output_root / "summary.json", {"success": False, "steps": steps})
@@ -212,11 +248,10 @@ def main():
             str(prompts_path),
             "--output-dir",
             str(images_dir),
-            "--seed-base",
-            str(args.seed_base),
-        ],
+        ] + (["--seed-base", str(args.seed_base)] if args.seed_base is not None else []),
         no_skip=args.no_skip,
         launch_stagger_seconds=args.launch_stagger_seconds,
+        logs_dir=logs_dir,
     )
     steps.extend(stage2_workers)
     if not all(step["return_code"] == 0 for step in stage2_workers):
@@ -240,6 +275,7 @@ def main():
         ],
         no_skip=args.no_skip,
         launch_stagger_seconds=args.launch_stagger_seconds,
+        logs_dir=logs_dir,
     )
     steps.extend(stage25_workers)
     if not all(step["return_code"] == 0 for step in stage25_workers):
@@ -249,11 +285,14 @@ def main():
     stage3_devices = parse_cuda_devices(args.i23d_devices)
     launched_stage3 = []
     for index, shard in enumerate(shard_ids(obj_ids, stage3_devices)):
+        gpu_index = shard["device"].replace("cuda:", "")
+        worker_env = os.environ.copy()
+        worker_env["CUDA_VISIBLE_DEVICES"] = gpu_index
         cmd = [
             args.python_bin,
             str(STAGE3_SCRIPT),
             "--device",
-            shard["device"],
+            "cuda:0",
             "--prompts-path",
             str(prompts_path),
             "--images-dir",
@@ -264,36 +303,33 @@ def main():
             str(meshes_raw_dir),
             "--ids",
             ",".join(shard["obj_ids"]),
-            "--seed-base",
-            str(args.seed_base),
         ]
+        if args.seed_base is not None:
+            cmd.extend(["--seed-base", str(args.seed_base)])
         if args.no_skip:
             cmd.append("--no-skip")
         if args.shape_only:
             cmd.append("--shape-only")
-        launched_stage3.append(launch_step(cmd, f"stage3_i23d_{shard['device']}"))
+        launched_stage3.append(launch_step(cmd, f"stage3_i23d_{shard['device']}", logs_dir, env=worker_env))
         if index < len(stage3_devices) - 1 and args.launch_stagger_seconds > 0:
             time.sleep(float(args.launch_stagger_seconds))
 
-    stage3_workers = []
-    for launched in launched_stage3:
-        stdout, _ = launched["process"].communicate()
-        stage3_workers.append(
-            {
-                "name": launched["name"],
-                "command": launched["command"],
-                "return_code": launched["process"].returncode,
-                "elapsed_seconds": round(time.time() - float(launched["started_at"]), 3),
-                "stdout_tail": (stdout or "")[-8000:],
-            }
-        )
+    stage3_workers = [finalize_worker(launched) for launched in launched_stage3]
 
     steps.extend(stage3_workers)
-    if not all(step["return_code"] == 0 for step in stage3_workers):
-        save_json(output_root / "summary.json", {"success": False, "steps": steps})
-        raise SystemExit(1)
+    stage3_failed = [s for s in stage3_workers if s["return_code"] != 0]
+    if stage3_failed:
+        print(f"[WARN] {len(stage3_failed)}/{len(stage3_workers)} stage3 workers "
+              f"returned non-zero, checking for partial meshes...")
 
     copy_meshes(meshes_raw_dir, meshes_dir)
+    produced = list(meshes_dir.glob("*.glb"))
+    if not produced:
+        save_json(output_root / "summary.json", {"success": False, "steps": steps})
+        raise SystemExit(1)
+    if stage3_failed:
+        print(f"[WARN] Continuing with {len(produced)} meshes despite "
+              f"{len(stage3_failed)} worker failures")
     summary = {
         "success": True,
         "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),

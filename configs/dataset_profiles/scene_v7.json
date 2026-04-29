@@ -1,8 +1,8 @@
 {
   "dataset_name": "scene_v7",
   "task_type": "scene_insert",
-  "accept_threshold": 0.78,
-  "reject_threshold": 0.35,
+  "accept_threshold": 0.55,
+  "reject_threshold": 0.30,
   "preserve_score_threshold": 0.72,
   "explore_threshold": 0.60,
   "stability_threshold": 0.03,

@@ -18,7 +18,7 @@ SPLITS = ("train", "val", "test")
 def read_json(path: Path) -> Optional[dict]:
     if not path.exists():
         return None
-    with path.open("r", encoding="utf-8") as f:
+    with path.open("r", encoding="utf-8-sig") as f:
         return json.load(f)
 
 
@@ -30,7 +30,7 @@ def write_json(path: Path, payload: dict) -> None:
 
 def read_jsonl(path: Path) -> List[dict]:
     rows = []
-    with path.open("r", encoding="utf-8") as f:
+    with path.open("r", encoding="utf-8-sig") as f:
         for line in f:
             line = line.strip()
             if line:

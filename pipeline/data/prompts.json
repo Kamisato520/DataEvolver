@@ -6,7 +6,7 @@
     "prompt": "A single solid oak dining chair with a straight backrest, four square legs, and a flat seat, crafted from warm honey-brown wood with visible grain and a smooth satin varnish. Minimal Scandinavian style, sturdy proportions, clean edges, and a clear silhouette suited for 3D reconstruction. Soft highlights define the contours, joints, and wood texture, studio lighting, white background, photorealistic, 8K",
     "features": {
       "material": "solid oak wood",
-      "color": "medium-dark natural brown",
+      "color": "honey brown",
       "style": "Scandinavian minimal"
     }
   },
@@ -28,7 +28,7 @@
     "prompt": "A single adjustable desk lamp with a round metal base, slim articulated arm, and conical shade, finished in matte black powder-coated steel with brushed aluminum joints. Functional industrial style, clear mechanical structure, neat proportions, and a strong silhouette that reads well from every angle for 3D reconstruction. Focused highlights trace the arm hinges and shade edges, studio lighting, white background, photorealistic, 8K",
     "features": {
       "material": "powder-coated steel and aluminum",
-      "color": "matte charcoal black",
+      "color": "matte black",
       "style": "industrial"
     }
   },
@@ -38,9 +38,9 @@
     "category": "vehicle",
     "prompt": "A single mid-size sedan car with smooth body panels, four doors, clear windows, silver alloy wheels, and realistic black rubber tires, finished in glossy metallic silver paint. Contemporary automotive design with a clean aerodynamic silhouette, moderate detailing, and well-defined proportions suitable for 3D reconstruction. Controlled reflections reveal the hood, roofline, wheel arches, mirrors, and trim, studio lighting, white background, photorealistic, 8K",
     "features": {
-      "material": "painted automotive metal and glass",
-      "color": "deep graphite gray",
-      "style": "compact modern sedan"
+      "material": "painted metal, glass, and rubber",
+      "color": "metallic silver",
+      "style": "contemporary automotive"
     }
   },
   {
@@ -49,8 +49,8 @@
     "category": "vehicle",
     "prompt": "A single standard street motorcycle with a compact fuel tank, exposed frame, round headlight, black seat, and two thick rubber tires, built from painted metal, brushed steel, and matte plastic. Modern naked-bike style with a strong side silhouette, readable mechanical parts, and moderate complexity for 3D reconstruction. Directional highlights define the tank curves, engine block, handlebars, and wheel rims, studio lighting, white background, photorealistic, 8K",
     "features": {
-      "material": "painted metal, steel, rubber",
-      "color": "deep red and black",
+      "material": "painted metal, steel, rubber, and plastic",
+      "color": "red and black",
       "style": "modern naked bike"
     }
   },
@@ -61,492 +61,52 @@
     "prompt": "A single city bicycle with a lightweight aluminum frame, straight handlebars, slim saddle, spoke wheels, chain guard, and narrow black tires, finished in matte forest green paint. Practical urban design with clean geometry, balanced proportions, and a crisp recognizable silhouette that remains suitable for 3D reconstruction. Soft reflections outline the frame tubes, rims, pedals, and handlebar grips, studio lighting, white background, photorealistic, 8K",
     "features": {
       "material": "aluminum, rubber, and steel",
-      "color": "muted forest green",
+      "color": "forest green",
       "style": "urban commuter"
     }
   },
   {
     "id": "obj_007",
-    "name": "backpack",
-    "category": "daily_item",
-    "prompt": "A single everyday backpack with a soft rectangular body, front zipper pocket, top carry handle, and clear shoulder straps, made of woven nylon fabric with subtle stitching and matte zipper hardware. Charcoal black with muted olive accents, practical proportions, and a clear readable silhouette ideal for 3D reconstruction. Even lighting reveals the fabric texture, strap structure, and pocket detail, studio lighting, white background, photorealistic, 8K",
+    "name": "cat",
+    "category": "animal",
+    "prompt": "A single domestic short-haired cat sitting upright with tail wrapped near the paws, compact body, alert ears, and bright forward-facing eyes. Realistic soft fur with a warm orange tabby coat, subtle cream underbelly, and fine striped texture. Natural animal anatomy, clear silhouette, and controlled pose suitable for 3D reconstruction. Gentle highlights define the fur direction, face, paws, and tail shape, studio lighting, white background, photorealistic, 8K",
     "features": {
-      "material": "woven nylon fabric",
-      "color": "charcoal black with olive accents",
-      "style": "practical everyday"
+      "material": "soft fur",
+      "color": "orange tabby",
+      "style": "realistic natural"
     }
   },
   {
     "id": "obj_008",
-    "name": "suitcase",
-    "category": "daily_item",
-    "prompt": "A single compact carry-on suitcase with a clean rectangular hard shell, telescopic handle housing, four caster wheels, and a readable zipper seam, made of matte-finish polycarbonate with satin metal hardware. Muted navy blue color, stable upright proportions, and a crisp silhouette suited for 3D reconstruction. Controlled highlights define the shell surface, wheels, and handle mechanism, studio lighting, white background, photorealistic, 8K",
+    "name": "dinosaur",
+    "category": "animal",
+    "prompt": "A single Tyrannosaurus rex standing in a stable side-facing pose with a large head, muscular legs, small forearms, and a long balancing tail, covered in textured reptile skin. Realistic prehistoric animal style with earthy olive-green scales, darker ridge markings, and a strong readable silhouette suitable for 3D reconstruction. Focused highlights reveal the jawline, claws, muscles, and scale pattern, studio lighting, white background, photorealistic, 8K",
     "features": {
-      "material": "hard-shell polycarbonate",
-      "color": "muted navy blue",
-      "style": "compact carry-on"
+      "material": "textured reptile skin",
+      "color": "olive green",
+      "style": "realistic prehistoric"
     }
   },
   {
     "id": "obj_009",
-    "name": "traffic_cone",
-    "category": "street_object",
-    "prompt": "A single standard roadside traffic cone with a tapered body, square weighted base, and a worn reflective band, made of matte flexible safety plastic. Safety orange with white reflective stripe, crisp silhouette, and realistic thickness at the rim and base for 3D reconstruction. Soft highlights trace the cone taper and reflective band detail, studio lighting, white background, photorealistic, 8K",
+    "name": "gazebo",
+    "category": "architecture",
+    "prompt": "A single octagonal garden gazebo with a peaked roof, eight slim support columns, open sides, and a raised wooden platform, built from painted timber with subtle grain and clean trim details. Classic pavilion style, symmetrical structure, and a clear architectural silhouette with moderate detail for 3D reconstruction. Even highlights separate the roof edges, columns, railings, and base geometry, studio lighting, white background, photorealistic, 8K",
     "features": {
-      "material": "flexible safety plastic",
-      "color": "safety orange with white stripe",
-      "style": "standard roadside"
+      "material": "painted timber",
+      "color": "white and natural wood",
+      "style": "classic pavilion"
     }
   },
   {
     "id": "obj_010",
-    "name": "fire_hydrant",
-    "category": "street_object",
-    "prompt": "A single classic urban fire hydrant with a cylindrical center body, side nozzles, domed top cap, and base flange, made of painted cast metal with subtle weathering and solid industrial surface detail. Strong hydrant red with slightly darker caps, sturdy symmetrical proportions, and a clean readable form suited for 3D reconstruction. Even highlights define the metal surface, nozzle bolts, and cap edges, studio lighting, white background, photorealistic, 8K",
+    "name": "fountain",
+    "category": "architecture",
+    "prompt": "A single three-tier ornamental fountain carved from pale beige stone, featuring a circular basin, stacked bowls, central column, and simple sculpted rims with lightly weathered texture. Traditional European garden style, symmetrical form, and a clean vertical silhouette appropriate for 3D reconstruction. Soft highlights define the stone surface, edges, tier transitions, and basin depth without excessive ornament, studio lighting, white background, photorealistic, 8K",
     "features": {
-      "material": "painted cast metal",
-      "color": "hydrant red",
-      "style": "classic urban"
-    }
-  },
-  {
-    "id": "obj_011",
-    "name": "mailbox",
-    "category": "street_object",
-    "prompt": "A single curved-top roadside mailbox with an arched top shell, front door, flag arm, and a stable support post, made of painted sheet metal with matte finish and slight edge wear. Desaturated blue-gray color, readable proportions, and a clear vertical silhouette suited for 3D reconstruction. Soft highlights trace the curved top, door seam, and flag mechanism, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted sheet metal",
-      "color": "desaturated blue-gray",
-      "style": "curved-top roadside"
-    }
-  },
-  {
-    "id": "obj_012",
-    "name": "park_bench",
-    "category": "street_object",
-    "prompt": "A single simple public park bench with slatted wood seat and backrest, two clear cast metal side supports, and grounded legs, made of painted cast iron supports with varnished wood slats. Warm brown wood with dark iron supports, realistic seat-back proportions, and a readable horizontal silhouette suited for 3D reconstruction. Highlights define the slat spacing, metal curves, and wood grain, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "cast metal and varnished wood",
-      "color": "warm brown wood with dark iron",
-      "style": "simple public park"
-    }
-  },
-  {
-    "id": "obj_013",
-    "name": "potted_plant",
-    "category": "daily_item",
-    "prompt": "A single compact decorative houseplant in an unglazed terracotta pot with a readable rim and base, featuring a dense upright leaf cluster with matte green leaves and subtle natural variation. Earthy terracotta with medium green foliage, believable plant volume without messy overgrowth, and a clean silhouette suited for 3D reconstruction. Soft lighting reveals the leaf shapes, pot texture, and soil surface, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "terracotta pot with green leaves",
-      "color": "earthy terracotta with green foliage",
-      "style": "compact decorative houseplant"
-    }
-  },
-  {
-    "id": "obj_014",
-    "name": "skateboard",
-    "category": "sports_item",
-    "prompt": "A single street skateboard with a slim painted maple deck, matte grip tape, metal trucks, and four rubber wheels, featuring an upward-curved nose and tail. Natural wood underside with muted teal accents, correct board-to-wheel proportions, and a readable side silhouette suited for 3D reconstruction. Controlled highlights define the deck curvature, truck axles, and wheel rims, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "maple wood, metal trucks, rubber wheels",
-      "color": "natural wood with teal accents",
-      "style": "street skateboard"
-    }
-  },
-  {
-    "id": "obj_015",
-    "name": "bicycle_helmet",
-    "category": "sports_item",
-    "prompt": "A single modern commuter bicycle helmet with a rounded matte molded shell, clear vent openings, chin straps, and believable thickness, finished in matte white with gray trim. Woven interior straps with subtle vent edges, clean protective form, and a readable silhouette suited for 3D reconstruction. Even lighting reveals the shell curvature, vent pattern, and strap buckle detail, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "molded shell with woven straps",
-      "color": "matte white with gray trim",
-      "style": "modern commuter"
-    }
-  },
-  {
-    "id": "obj_016",
-    "name": "watering_can",
-    "category": "daily_item",
-    "prompt": "A single traditional garden watering can with a rounded body, arched top handle, long spout, and a readable fill opening, made of powder-coated metal with soft satin reflections. Muted sage green color, realistic proportions, and a clean recognizable silhouette suited for 3D reconstruction. Soft highlights trace the body curves, spout, and handle arch, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "powder-coated metal",
-      "color": "muted sage green",
-      "style": "traditional garden"
-    }
-  },
-  {
-    "id": "obj_017",
-    "name": "acoustic_guitar",
-    "category": "daily_item",
-    "prompt": "A single classic acoustic guitar with a curved hollow body, round sound hole, long neck, readable headstock, and straight string path, crafted from varnished tonewood with dark bridge, subtle grain, and satin-finish neck. Warm honey brown wood with darker sides, believable proportions, and a clear side silhouette suited for 3D reconstruction. Soft reflections define the body curves, fret markers, and string tension, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "varnished tonewood",
-      "color": "warm honey brown",
-      "style": "classic acoustic"
-    }
-  },
-  {
-    "id": "obj_018",
-    "name": "office_trash_bin",
-    "category": "daily_item",
-    "prompt": "A single simple office waste bin with a tapered cylindrical shape, open rim, sturdy base, and clean vertical profile, made of matte injection-molded plastic with mild surface texture. Neutral dark gray color, balanced proportions without deformation, and a readable silhouette suited for 3D reconstruction. Even lighting reveals the smooth surfaces and rim edge, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "injection-molded plastic",
-      "color": "neutral dark gray",
-      "style": "simple office"
-    }
-  },
-  {
-    "id": "obj_019",
-    "name": "wooden_stool",
-    "category": "daily_item",
-    "prompt": "A single simple utility stool with a flat round seat, four sturdy legs, clear leg spacing, and readable stretchers, made of solid wood with visible grain and softly worn edges. Light natural oak color, realistic proportions, and a clean stable silhouette suited for 3D reconstruction. Gentle highlights define the grain texture, seat edge, and leg joinery, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "solid wood",
-      "color": "light natural oak",
-      "style": "simple utility"
-    }
-  },
-  {
-    "id": "obj_020",
-    "name": "tool_box",
-    "category": "daily_item",
-    "prompt": "A single portable mechanic toolbox with a rectangular storage body, hinged lid, top handle, and side latches, made of painted steel with matte black handle grips and latch hardware. Muted industrial red with black details, solid box-like proportions, and a readable silhouette suited for 3D reconstruction. Controlled highlights trace the metal panels, latch mechanisms, and handle profile, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted steel",
-      "color": "muted industrial red with black",
-      "style": "portable mechanic"
-    }
-  },
-  {
-    "id": "obj_021",
-    "name": "folding_chair",
-    "category": "daily_item",
-    "prompt": "A single portable outdoor folding chair with an X-shaped folding support structure, slightly reclined backrest, taut seat panel, and four readable feet, made of powder-coated tubular steel frame with woven synthetic seat fabric. Matte dark gray frame with muted khaki fabric, believable proportions, and a clear compact silhouette suited for 3D reconstruction. Even lighting reveals the frame joints, fabric tension, and folding mechanism, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "tubular steel and synthetic fabric",
-      "color": "dark gray frame with khaki fabric",
-      "style": "portable outdoor folding"
-    }
-  },
-  {
-    "id": "obj_022",
-    "name": "side_table",
-    "category": "daily_item",
-    "prompt": "A single compact modern side table with a round tabletop, slim support frame, and stable base, made of painted metal frame with a lightly textured wood composite top. Warm walnut top with matte black frame, clear tabletop thickness, and a clean readable silhouette suited for 3D reconstruction. Soft highlights define the tabletop edge, frame geometry, and material contrast, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "metal frame with wood top",
-      "color": "warm walnut top with black frame",
-      "style": "compact modern"
-    }
-  },
-  {
-    "id": "obj_023",
-    "name": "electric_kettle",
-    "category": "daily_item",
-    "prompt": "A single modern countertop electric kettle with a rounded body, arched handle, short pouring spout, top lid, and stable base ring, made of brushed stainless steel with matte black handle and lid trim. Silver metal with black accents, realistic appliance proportions, and a clean readable silhouette suited for 3D reconstruction. Controlled reflections reveal the brushed metal surface, spout angle, and handle curve, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "brushed stainless steel",
-      "color": "silver with black accents",
-      "style": "modern countertop"
-    }
-  },
-  {
-    "id": "obj_024",
-    "name": "table_fan",
-    "category": "daily_item",
-    "prompt": "A single compact oscillating table fan with a circular front grill, central hub, readable fan blades, short neck, and weighted round base, made of painted metal grill with molded plastic blades and base housing. Soft white body with gray grill details, clear silhouette, and balanced proportions suited for 3D reconstruction. Even lighting defines the grill pattern, blade angles, and base form, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "metal grill with plastic housing",
-      "color": "soft white with gray details",
-      "style": "compact oscillating"
-    }
-  },
-  {
-    "id": "obj_025",
-    "name": "camping_lantern",
-    "category": "daily_item",
-    "prompt": "A single portable camping lantern with a cylindrical light body, top carry handle, protective frame, and stable base, made of painted metal cage with frosted translucent light chamber and rubberized handle details. Muted olive green with warm off-white diffuser, readable outdoor utility proportions, and a clean silhouette suited for 3D reconstruction. Soft highlights trace the cage bars, diffuser glow area, and handle arch, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted metal with frosted diffuser",
-      "color": "muted olive green with off-white",
-      "style": "portable camping"
-    }
-  },
-  {
-    "id": "obj_026",
-    "name": "storage_crate",
-    "category": "daily_item",
-    "prompt": "A single industrial stackable storage crate with a rectangular bin shape, open top, reinforced side walls, readable hand holds, and straight stackable edges, made of sturdy molded plastic with subtle ribbing and matte surface texture. Desaturated charcoal gray color, functional proportions, and a clean angular silhouette suited for 3D reconstruction. Even lighting reveals the ribbed walls, hand-hold openings, and stacking features, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "molded plastic",
-      "color": "desaturated charcoal gray",
-      "style": "industrial stackable"
-    }
-  },
-  {
-    "id": "obj_027",
-    "name": "hand_truck",
-    "category": "daily_item",
-    "prompt": "A single upright warehouse hand truck with a tall tubular frame, curved top handles, two aligned wheels, and a flat bottom toe plate, made of painted steel frame with hard rubber wheels and textured plastic handle grips. Industrial blue frame with black wheels, realistic dolly proportions, and a clear vertical silhouette suited for 3D reconstruction. Highlights define the frame tubes, wheel profile, and handle grip texture, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted steel with rubber wheels",
-      "color": "industrial blue with black wheels",
-      "style": "upright warehouse"
-    }
-  },
-  {
-    "id": "obj_028",
-    "name": "wheelbarrow",
-    "category": "daily_item",
-    "prompt": "A single garden wheelbarrow with a single front wheel, deep tray basin, long handles, and two support legs, made of painted metal basin with steel handles and a rubber front wheel. Muted green basin with black wheel and dark steel frame, believable outdoor tool proportions, and a readable silhouette suited for 3D reconstruction. Soft highlights trace the basin curves, wheel rim, and handle grips, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted metal with rubber wheel",
-      "color": "muted green with black wheel",
-      "style": "garden"
-    }
-  },
-  {
-    "id": "obj_029",
-    "name": "step_ladder",
-    "category": "daily_item",
-    "prompt": "A single portable household step ladder with an A-frame stance, evenly spaced steps, top platform, and clear hinge structure, made of brushed aluminum frame with textured anti-slip steps and plastic foot caps. Silver aluminum with dark gray step treads, realistic ladder proportions, and a clean angular silhouette suited for 3D reconstruction. Even lighting reveals the aluminum surface, step treads, and hinge details, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "brushed aluminum",
-      "color": "silver with dark gray treads",
-      "style": "portable household"
-    }
-  },
-  {
-    "id": "obj_030",
-    "name": "picnic_cooler",
-    "category": "daily_item",
-    "prompt": "A single portable picnic cooler with a rectangular insulated box, hinged lid, side handles, and sturdy base corners, made of hard molded plastic with a lightly textured shell and latch hardware. Off-white body with muted blue lid, believable cooler thickness, and a clean boxy silhouette suited for 3D reconstruction. Soft highlights define the lid seam, latch detail, and handle grips, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "hard molded plastic",
-      "color": "off-white with muted blue lid",
-      "style": "portable picnic"
-    }
-  },
-  {
-    "id": "obj_031",
-    "name": "pickup_truck",
-    "category": "vehicle",
-    "prompt": "A single mid-size modern pickup truck with a double-cab body, open cargo bed, four readable wheels, defined headlights, and realistic road-vehicle proportions, made of painted automotive metal with realistic glass, rubber tires, and restrained metallic reflections. Deep graphite blue with black trim, clean automotive silhouette, and well-defined proportions suited for 3D reconstruction. Controlled highlights reveal the body panels, wheel arches, and cargo bed edges, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted automotive metal and glass",
-      "color": "deep graphite blue with black trim",
-      "style": "mid-size modern pickup"
-    }
-  },
-  {
-    "id": "obj_032",
-    "name": "scooter",
-    "category": "vehicle",
-    "prompt": "A single compact city scooter with a step-through body, front handlebar column, two aligned wheels, readable seat, and compact commuter proportions, made of painted plastic body panels with matte black trim and metal fork details. Muted teal body with black seat, balanced proportions, and a readable side silhouette suited for 3D reconstruction. Even highlights trace the body curves, wheel rims, and handlebar column, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted plastic with metal details",
-      "color": "muted teal with black seat",
-      "style": "compact city"
-    }
-  },
-  {
-    "id": "obj_033",
-    "name": "delivery_van",
-    "category": "vehicle",
-    "prompt": "A single compact urban delivery van with a boxy cargo body, short hood, large windshield, sliding side-door seam, and four clear wheels, made of painted metal body with realistic glass, matte trim, and mild panel seam detail. Clean white body with gray bumper trim, believable van proportions, and a readable boxy silhouette suited for 3D reconstruction. Controlled reflections define the panel seams, windshield, and wheel wells, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted metal with glass",
-      "color": "clean white with gray trim",
-      "style": "compact urban delivery"
-    }
-  },
-  {
-    "id": "obj_034",
-    "name": "golf_cart",
-    "category": "vehicle",
-    "prompt": "A single practical two-seat golf cart with a roof canopy, open sides, bench seat, steering area, and four small wheels, made of painted fiberglass body with matte metal frame supports and vinyl seating. Off-white body with beige seats, correct cart proportions, and a readable open-sided silhouette suited for 3D reconstruction. Soft highlights define the canopy edge, seat surface, and wheel detail, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "fiberglass with metal frame",
-      "color": "off-white with beige seats",
-      "style": "practical two-seat"
-    }
-  },
-  {
-    "id": "obj_035",
-    "name": "traffic_barrier",
-    "category": "street_object",
-    "prompt": "A single portable roadside traffic barrier with a long rectangular body, weighted feet, crisp silhouette, and readable reflective striping, made of molded safety plastic with worn reflective panels and a matte surface. Orange and white striped safety colors, realistic thickness, and a clean horizontal form suited for 3D reconstruction. Even lighting reveals the stripe pattern, weighted base, and surface wear, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "molded safety plastic",
-      "color": "orange and white striped",
-      "style": "portable roadside"
-    }
-  },
-  {
-    "id": "obj_036",
-    "name": "road_bollard",
-    "category": "street_object",
-    "prompt": "A single fixed roadside safety bollard with an upright cylindrical post, rounded cap, stable base flange, and clean vertical silhouette, made of painted steel with subtle weathering and reflective band details. Dark gray post with yellow reflective accents, believable street scale, and a simple readable form suited for 3D reconstruction. Controlled highlights trace the post surface, reflective band, and cap edge, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted steel",
-      "color": "dark gray with yellow accents",
-      "style": "fixed roadside safety"
-    }
-  },
-  {
-    "id": "obj_037",
-    "name": "parking_meter",
-    "category": "street_object",
-    "prompt": "A single single-space parking meter with a narrow post, rounded meter head, front display area, payment slot details, and realistic curbside proportions, made of painted cast metal with matte display housing and subtle edge wear. Blue-gray body with black display trim, clean vertical silhouette, and readable detail suited for 3D reconstruction. Soft highlights define the meter head, display face, and post form, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted cast metal",
-      "color": "blue-gray with black trim",
-      "style": "single-space curbside"
-    }
-  },
-  {
-    "id": "obj_038",
-    "name": "street_sign",
-    "category": "street_object",
-    "prompt": "A single urban roadside street sign with a rectangular sign panel, slim vertical pole, readable plate thickness, and clean upright proportions, made of painted metal sign plate with galvanized pole and low-gloss printed surface. Blue sign face with white markings and gray pole, crisp silhouette, and realistic street-furniture scale suited for 3D reconstruction. Even lighting reveals the sign face, pole surface, and mounting bracket, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted metal with galvanized pole",
-      "color": "blue face with white markings",
-      "style": "urban roadside"
-    }
-  },
-  {
-    "id": "obj_039",
-    "name": "planter_box",
-    "category": "street_object",
-    "prompt": "A single rectangular outdoor planter box with a box-shaped planter body, visible rim thickness, dense but controlled foliage, and grounded rectangular proportions, made of painted wood or composite planter body with matte foliage and soil detail. Warm brown planter with medium green plants, clean angular silhouette, and a readable form suited for 3D reconstruction. Soft highlights trace the planter edges, soil surface, and leaf clusters, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted wood with foliage",
-      "color": "warm brown with green plants",
-      "style": "rectangular outdoor"
-    }
-  },
-  {
-    "id": "obj_040",
-    "name": "street_trash_can",
-    "category": "street_object",
-    "prompt": "A single public street trash can with an upright cylindrical bin, open top rim, perforated side walls, and sturdy base, made of painted perforated steel with matte finish and slight outdoor wear. Dark green metal with black base trim, realistic sidewalk scale, and a clean vertical silhouette suited for 3D reconstruction. Even lighting reveals the perforation pattern, rim edge, and base structure, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted perforated steel",
-      "color": "dark green with black trim",
-      "style": "public street"
-    }
-  },
-  {
-    "id": "obj_041",
-    "name": "basketball",
-    "category": "sports_item",
-    "prompt": "A single standard outdoor basketball with a clean spherical form, readable seam channels, and believable sports-ball proportions, made of pebbled rubber with realistic channel grooves and matte sports-surface response. Classic orange-brown basketball color, no distortion, and a simple recognizable silhouette suited for 3D reconstruction. Soft highlights trace the surface texture and channel grooves, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "pebbled rubber",
-      "color": "classic orange-brown",
-      "style": "standard outdoor"
-    }
-  },
-  {
-    "id": "obj_042",
-    "name": "soccer_ball",
-    "category": "sports_item",
-    "prompt": "A single standard match soccer ball with a clean spherical shape, readable stitched panel pattern, and realistic ball roundness, made of synthetic leather panels with subtle seam detail and matte surface finish. White base with black panel accents, no deformation, and a classic recognizable silhouette suited for 3D reconstruction. Even lighting defines the panel edges, stitching, and surface texture, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "synthetic leather",
-      "color": "white with black accents",
-      "style": "standard match"
-    }
-  },
-  {
-    "id": "obj_043",
-    "name": "tennis_racket",
-    "category": "sports_item",
-    "prompt": "A single modern tennis racket with an oval racket head, taut string grid, slim shaft, and wrapped handle, made of painted composite frame with woven string bed and wrapped handle grip. White frame with dark navy accents, correct sports-equipment proportions, and a clear readable silhouette suited for 3D reconstruction. Focused highlights trace the string pattern, frame edge, and grip wrap, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "composite frame with string bed",
-      "color": "white with dark navy accents",
-      "style": "modern tennis"
-    }
-  },
-  {
-    "id": "obj_044",
-    "name": "baseball_bat",
-    "category": "sports_item",
-    "prompt": "A single full-size baseball bat with a long tapered cylindrical form, thicker barrel end, narrow handle, and smooth readable silhouette, made of varnished wood with subtle wear at the grip area and satin finish. Natural wood brown with dark grip tape, realistic proportions, and a clean elongated form suited for 3D reconstruction. Soft highlights reveal the wood grain, taper transition, and grip texture, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "varnished wood",
-      "color": "natural wood brown with dark grip",
-      "style": "full-size"
-    }
-  },
-  {
-    "id": "obj_045",
-    "name": "surfboard",
-    "category": "sports_item",
-    "prompt": "A single classic short surfboard with a long streamlined shape, pointed nose, rounded tail, visible fin cluster, and believable board thickness, made of gloss-coated fiberglass with subtle wax texture and soft specular reflections. Off-white board with muted blue accent stripe, clean elongated silhouette, and realistic proportions suited for 3D reconstruction. Controlled highlights define the board curves, fin edges, and surface gloss, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "gloss-coated fiberglass",
-      "color": "off-white with muted blue stripe",
-      "style": "classic short"
-    }
-  },
-  {
-    "id": "obj_046",
-    "name": "life_ring",
-    "category": "sports_item",
-    "prompt": "A single marine safety life ring with a clean torus shape, readable inner opening, wrapped rope around the perimeter, and realistic flotation proportions, made of coated foam safety material with wrapped rope detail and weather-resistant finish. Bright rescue orange with white rope accents, simple recognizable form, and a clear silhouette suited for 3D reconstruction. Even lighting reveals the foam surface, rope wraps, and ring curvature, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "coated foam with rope",
-      "color": "bright rescue orange with white",
-      "style": "marine safety"
-    }
-  },
-  {
-    "id": "obj_047",
-    "name": "barbecue_grill",
-    "category": "daily_item",
-    "prompt": "A single compact backyard barbecue grill with a rounded grill chamber, lid handle, side shelf hints, support legs, and two small wheels, made of painted metal body with dark grilling surfaces and light heat discoloration. Matte black body with silver handles, stable proportions, and a readable outdoor cooking silhouette suited for 3D reconstruction. Soft highlights trace the lid dome, handle curve, and wheel profile, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted metal",
-      "color": "matte black with silver handles",
-      "style": "compact backyard"
-    }
-  },
-  {
-    "id": "obj_048",
-    "name": "portable_generator",
-    "category": "daily_item",
-    "prompt": "A single portable jobsite generator with a boxy generator core, tubular carry frame, control panel face, and two wheels, made of painted steel frame with molded plastic housing panels and matte control surfaces. Industrial yellow body with black frame, realistic equipment proportions, and a clean functional silhouette suited for 3D reconstruction. Even lighting reveals the frame tubes, panel details, and wheel profile, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "steel frame with plastic housing",
-      "color": "industrial yellow with black frame",
-      "style": "portable jobsite"
-    }
-  },
-  {
-    "id": "obj_049",
-    "name": "shopping_cart",
-    "category": "street_object",
-    "prompt": "A single standard supermarket shopping cart with a wire basket body, child seat flap, four caster wheels, and lower rack shelf, made of chrome-coated metal wire frame with plastic handle trim and rubber caster wheels. Silver metal with red handle detail, believable retail-cart proportions, and a readable open-frame silhouette suited for 3D reconstruction. Controlled highlights trace the wire grid, caster wheels, and handle bar, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "chrome-coated wire with plastic trim",
-      "color": "silver with red handle",
-      "style": "standard supermarket"
-    }
-  },
-  {
-    "id": "obj_050",
-    "name": "fire_extinguisher",
-    "category": "daily_item",
-    "prompt": "A single portable fire extinguisher with an upright pressure cylinder, top handle and nozzle assembly, curved hose, and stable bottom ring, made of painted steel cylinder with matte hose and metal valve hardware. Safety red body with black hose, realistic industrial scale, and a clean vertical silhouette suited for 3D reconstruction. Soft highlights define the cylinder surface, valve mechanism, and hose curve, studio lighting, white background, photorealistic, 8K",
-    "features": {
-      "material": "painted steel with rubber hose",
-      "color": "safety red with black hose",
-      "style": "portable"
+      "material": "carved stone",
+      "color": "pale beige",
+      "style": "traditional European"
     }
   }
 ]

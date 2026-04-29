@@ -1,4 +1,4 @@
-# DataEvolver: Free-Form VLM-Guided Synthetic Data Construction for View-Controlled Image Editing
+# ARIS: Free-Form VLM-Guided Synthetic Data Construction for View-Controlled Image Editing
 
 **Technical Report**
 
@@ -6,9 +6,9 @@
 
 ## Abstract
 
-We present **DataEvolver** (**A**utonomous **R**endering with **I**terative **S**cene-aware feedback), a fully automated pipeline for constructing training-ready synthetic datasets for image editing tasks. Building high-quality paired training data for 3D-aware image editing—such as view-controlled rotation—has traditionally required extensive manual tuning of rendering parameters in tools like Blender, an effort that is both time-consuming and difficult to scale. DataEvolver addresses this by introducing a *free-form VLM-guided rendering evolution loop*: a vision-language model reviews rendered scenes using natural language feedback, and an AI agent reads this feedback directly to select the next rendering action from a structured action space, iteratively improving visual quality until the reviewer confirms the result is acceptable.
+We present **ARIS** (**A**utonomous **R**endering with **I**terative **S**cene-aware feedback), a fully automated pipeline for constructing training-ready synthetic datasets for image editing tasks. Building high-quality paired training data for 3D-aware image editing—such as view-controlled rotation—has traditionally required extensive manual tuning of rendering parameters in tools like Blender, an effort that is both time-consuming and difficult to scale. ARIS addresses this by introducing a *free-form VLM-guided rendering evolution loop*: a vision-language model reviews rendered scenes using natural language feedback, and an AI agent reads this feedback directly to select the next rendering action from a structured action space, iteratively improving visual quality until the reviewer confirms the result is acceptable.
 
-We instantiate this pipeline to construct **DataEvolver-Rotate**, a 50-object, 350-pair rotation editing dataset in which each sample pairs a canonical front-view image with a target view specified by a natural-language prompt (e.g., *"Rotate this object from front view to right side view"*). Ablation experiments demonstrate that the VLM evolution loop substantially improves rendering quality over single-pass rendering without iterative refinement. Fine-tuning Qwen Image Edit 2511 with LoRA on DataEvolver-Rotate yields measurable improvements over the base model in PSNR, SSIM, and LPIPS on a held-out test set, validating the downstream training value of automatically constructed data.
+We instantiate this pipeline to construct **ARIS-Rotate**, a 50-object, 350-pair rotation editing dataset in which each sample pairs a canonical front-view image with a target view specified by a natural-language prompt (e.g., *"Rotate this object from front view to right side view"*). Ablation experiments demonstrate that the VLM evolution loop substantially improves rendering quality over single-pass rendering without iterative refinement. Fine-tuning Qwen Image Edit 2511 with LoRA on ARIS-Rotate yields measurable improvements over the base model in PSNR, SSIM, and LPIPS on a held-out test set, validating the downstream training value of automatically constructed data.
 
 ---
 
@@ -18,13 +18,13 @@ High-quality paired training data is fundamental to supervised image editing mod
 
 **The quality gap in synthetic data pipelines.** A standard approach is to render 3D assets automatically, producing paired images at low cost. However, naïve rendering often yields scenes with artifacts: flat lighting that fails to match the scene environment, color inconsistencies between object and background, physically implausible object placement (floating or intersecting the ground), and poor shadow quality. Existing pipelines typically address quality control through rigid scoring rules or fixed controllers that select rendering adjustments based on numeric thresholds—approaches that lack the semantic understanding needed to diagnose and resolve complex visual failures.
 
-**Our approach.** We propose DataEvolver, a pipeline in which rendering quality is improved through a *free-form VLM-guided evolution loop*. Rather than relying on structured scores or fixed rules, we employ a vision-language model (VLM) to review rendered scenes using natural language, identifying specific visual problems such as flat lighting, color shift, or weak grounding. An AI agent directly reads this free-form feedback and selects actions from a discrete rendering action space to address the diagnosed issues—adjusting key light intensity, environment rotation, material parameters, or object placement. This process repeats until the VLM reviewer explicitly confirms the result is acceptable.
+**Our approach.** We propose ARIS, a pipeline in which rendering quality is improved through a *free-form VLM-guided evolution loop*. Rather than relying on structured scores or fixed rules, we employ a vision-language model (VLM) to review rendered scenes using natural language, identifying specific visual problems such as flat lighting, color shift, or weak grounding. An AI agent directly reads this free-form feedback and selects actions from a discrete rendering action space to address the diagnosed issues—adjusting key light intensity, environment rotation, material parameters, or object placement. This process repeats until the VLM reviewer explicitly confirms the result is acceptable.
 
 The AI agent replaces the manual trial-and-error that human artists would otherwise perform when integrating 3D assets into Blender scenes: once the pipeline is validated, large-scale dataset construction no longer requires per-object expert tuning, reducing cost and improving consistency.
 
-**Instantiation: view-controlled rotation editing.** We instantiate DataEvolver for a concrete and evaluable task: constructing a dataset for *rotation-conditioned image editing*, where a model must rotate an object from a canonical front view to a target viewpoint specified in natural language (e.g., *"right side view"*, *"back-left view"*). We construct **DataEvolver-Rotate**, comprising 50 objects × 8 horizontal viewpoints, yielding 350 editing pairs for training.
+**Instantiation: view-controlled rotation editing.** We instantiate ARIS for a concrete and evaluable task: constructing a dataset for *rotation-conditioned image editing*, where a model must rotate an object from a canonical front view to a target viewpoint specified in natural language (e.g., *"right side view"*, *"back-left view"*). We construct **ARIS-Rotate**, comprising 50 objects × 8 horizontal viewpoints, yielding 350 editing pairs for training.
 
-**Results.** Ablation experiments show that the VLM evolution loop substantially improves rendering quality compared to single-pass rendering without iterative refinement. LoRA fine-tuning of Qwen Image Edit 2511 on DataEvolver-Rotate improves over the base model on PSNR, SSIM, and LPIPS, confirming that automatically constructed data has downstream training value. Comparing LoRA trained on refined data versus unrefined data further demonstrates that the evolution loop produces data of higher utility.
+**Results.** Ablation experiments show that the VLM evolution loop substantially improves rendering quality compared to single-pass rendering without iterative refinement. LoRA fine-tuning of Qwen Image Edit 2511 on ARIS-Rotate improves over the base model on PSNR, SSIM, and LPIPS, confirming that automatically constructed data has downstream training value. Comparing LoRA trained on refined data versus unrefined data further demonstrates that the evolution loop produces data of higher utility.
 
 **Contributions:**
 
@@ -32,15 +32,15 @@ The AI agent replaces the manual trial-and-error that human artists would otherw
 
 2. **Scene-aware Blender rendering integration.** We describe a rendering system that preserves real-scene lighting and environment, integrating 3D objects into existing Blender scene files while allowing per-object adjustment of lighting, placement, material, and scene parameters through 24 structured atomic actions.
 
-3. **DataEvolver-Rotate dataset and validation.** We construct a 50-object, 350-pair rotation editing dataset with natural-language viewpoint prompts, and validate its training utility via LoRA fine-tuning on Qwen Image Edit 2511.
+3. **ARIS-Rotate dataset and validation.** We construct a 50-object, 350-pair rotation editing dataset with natural-language viewpoint prompts, and validate its training utility via LoRA fine-tuning on Qwen Image Edit 2511.
 
 ---
 
 ## 2. Related Work
 
-**Synthetic data for image editing.** A large body of work has explored automatically constructing paired training data for instruction-following image editing. InstructPix2Pix [CITATION NEEDED] generates training pairs by combining GPT-4 [CITATION NEEDED] to produce editing instructions with Stable Diffusion [CITATION NEEDED] to render source/target image pairs. MagicBrush [CITATION NEEDED] introduces human-annotated real editing pairs to address distributional gaps in purely synthetic data. Emu Edit [CITATION NEEDED] scales instruction-following editing using a diverse multi-task dataset. These approaches focus on 2D semantic editing tasks; constructing *geometrically controlled* pairs—especially multi-view rotation—requires explicit 3D modeling that 2D diffusion-based pipelines cannot provide. DataEvolver fills this gap through a full 3D-to-render pipeline with iterative quality control.
+**Synthetic data for image editing.** A large body of work has explored automatically constructing paired training data for instruction-following image editing. InstructPix2Pix [CITATION NEEDED] generates training pairs by combining GPT-4 [CITATION NEEDED] to produce editing instructions with Stable Diffusion [CITATION NEEDED] to render source/target image pairs. MagicBrush [CITATION NEEDED] introduces human-annotated real editing pairs to address distributional gaps in purely synthetic data. Emu Edit [CITATION NEEDED] scales instruction-following editing using a diverse multi-task dataset. These approaches focus on 2D semantic editing tasks; constructing *geometrically controlled* pairs—especially multi-view rotation—requires explicit 3D modeling that 2D diffusion-based pipelines cannot provide. ARIS fills this gap through a full 3D-to-render pipeline with iterative quality control.
 
-**3D-aware data generation.** Objaverse [CITATION NEEDED] and its successors provide large-scale 3D asset libraries for rendering synthetic multi-view data. Methods such as Zero-1-to-3 [CITATION NEEDED], SyncDreamer [CITATION NEEDED], and Wonder3D [CITATION NEEDED] train novel view synthesis models on such data. These works focus on geometry reconstruction and view synthesis, but do not address scene-aware rendering quality or the iterative quality control needed to produce *training-ready* edited pairs suitable for instruction-following models. DataEvolver bridges this gap by integrating 3D reconstruction with scene-aware Blender rendering and VLM-based quality evolution.
+**3D-aware data generation.** Objaverse [CITATION NEEDED] and its successors provide large-scale 3D asset libraries for rendering synthetic multi-view data. Methods such as Zero-1-to-3 [CITATION NEEDED], SyncDreamer [CITATION NEEDED], and Wonder3D [CITATION NEEDED] train novel view synthesis models on such data. These works focus on geometry reconstruction and view synthesis, but do not address scene-aware rendering quality or the iterative quality control needed to produce *training-ready* edited pairs suitable for instruction-following models. ARIS bridges this gap by integrating 3D reconstruction with scene-aware Blender rendering and VLM-based quality evolution.
 
 **VLM as feedback and judge.** Using language models to evaluate or improve the outputs of other systems has gained significant traction. LLM-as-a-Judge [CITATION NEEDED] and related work show that strong LLMs can serve as proxies for human evaluation. In the multimodal setting, recent work has explored VLMs for image quality assessment [CITATION NEEDED] and preference alignment [CITATION NEEDED]. Our approach differs in that the VLM feedback is not used for *post-hoc evaluation* but as an *active signal* in an iterative rendering loop: the AI agent reads the reviewer's free-form text and directly decides which rendering parameters to adjust, closing the loop between evaluation and generation.
 
@@ -50,7 +50,7 @@ The AI agent replaces the manual trial-and-error that human artists would otherw
 
 ### 3.1 Pipeline Overview
 
-DataEvolver transforms a natural-language object description into a set of high-quality rendered images through six stages. The pipeline is fully automated: no human intervention is required between the initial concept description and the final quality-approved renders.
+ARIS transforms a natural-language object description into a set of high-quality rendered images through six stages. The pipeline is fully automated: no human intervention is required between the initial concept description and the final quality-approved renders.
 
 > **[Figure 1 placeholder]** Horizontal flowchart: Text Expansion → T2I Generation → SAM3 Segmentation → 3D Reconstruction → Scene-Aware Rendering → VLM Review Loop
 
@@ -82,7 +82,7 @@ Rendering each 3D object requires placing it plausibly within a scene, matching 
 
 ### 3.3 Free-Form VLM-Guided Rendering Evolution
 
-The core contribution of DataEvolver is the iterative quality refinement loop that drives rendered images toward acceptable visual quality through VLM feedback.
+The core contribution of ARIS is the iterative quality refinement loop that drives rendered images toward acceptable visual quality through VLM feedback.
 
 > **[Figure 2 placeholder]** Left column: Round 0 render → Round 1 → ... → Final (keep). Right column: VLM free-form text summary + agent-selected action at each round.
 
@@ -125,11 +125,11 @@ The reviewer concludes with one of three verdicts: **keep** (result is acceptabl
 
 ---
 
-## 4. DataEvolver-Rotate Dataset
+## 4. ARIS-Rotate Dataset
 
 ### 4.1 Construction
 
-We apply the DataEvolver pipeline to construct **DataEvolver-Rotate**, a dataset for rotation-conditioned image editing. Each sample in DataEvolver-Rotate pairs a canonical front-view image of an object with a target-view image and a natural-language editing instruction.
+We apply the ARIS pipeline to construct **ARIS-Rotate**, a dataset for rotation-conditioned image editing. Each sample in ARIS-Rotate pairs a canonical front-view image of an object with a target-view image and a natural-language editing instruction.
 
 **Object selection and diversity.** We generate 50 objects spanning diverse categories including furniture, household items, tools, decorative objects, and outdoor equipment. Object descriptions are generated to cover a range of materials (wood, metal, plastic, fabric), shapes (compact, elongated, symmetric, asymmetric), and color profiles.
 
@@ -182,7 +182,7 @@ We partition objects using an **object-disjoint** split: the same object cannot 
 We first validate that the VLM-guided evolution loop improves rendering quality compared to single-pass rendering without iterative refinement. We construct two versions of the 50-object rendering set:
 
 - **No-evolution (direct render):** The 3D mesh is inserted into the Blender scene and rendered at the default control state without any VLM review or parameter adjustment.
-- **Full pipeline (VLM evolution):** The complete DataEvolver loop is applied, with the AI agent reading VLM free-form feedback and selecting rendering actions until the reviewer issues a keep verdict.
+- **Full pipeline (VLM evolution):** The complete ARIS loop is applied, with the AI agent reading VLM free-form feedback and selecting rendering actions until the reviewer issues a keep verdict.
 
 **Table 2: Ablation — Effect of VLM Evolution Loop on Rendering Quality**
 
@@ -195,7 +195,7 @@ We first validate that the VLM-guided evolution loop improves rendering quality 
 
 ### 5.2 LoRA Fine-Tuning Setup
 
-We evaluate the downstream training value of DataEvolver-Rotate by fine-tuning Qwen Image Edit 2511 with LoRA on the training split and evaluating on the test split.
+We evaluate the downstream training value of ARIS-Rotate by fine-tuning Qwen Image Edit 2511 with LoRA on the training split and evaluating on the test split.
 
 **Base model.** Qwen Image Edit 2511 is an instruction-following image editing model that takes a source image and a text instruction as input and produces an edited image.
 
@@ -208,13 +208,13 @@ We evaluate the downstream training value of DataEvolver-Rotate by fine-tuning Q
 **Compared conditions:**
 1. **Base model** — Qwen Image Edit 2511 without fine-tuning
 2. **LoRA (no-evolution data)** — LoRA fine-tuned on single-pass rendered data
-3. **LoRA (full pipeline data)** — LoRA fine-tuned on quality-approved DataEvolver data
+3. **LoRA (full pipeline data)** — LoRA fine-tuned on quality-approved ARIS data
 
 ### 5.3 Quantitative Results
 
 We evaluate on the object-disjoint test split (10 objects, 70 pairs) using PSNR, SSIM, and LPIPS.
 
-**Table 3: Quantitative Evaluation on DataEvolver-Rotate Test Set**
+**Table 3: Quantitative Evaluation on ARIS-Rotate Test Set**
 
 | Method | PSNR ↑ | SSIM ↑ | LPIPS ↓ |
 |--------|--------|--------|---------|
@@ -245,9 +245,9 @@ We evaluate on the object-disjoint test split (10 objects, 70 pairs) using PSNR,
 
 **Action space coverage.** The current 24-action discrete action space has limited coverage of certain failure modes. In particular, `flat_low_contrast` (where the overall scene has low tonal range) and `color_shift` (where object hue diverges from scene) are not always fully resolved through material and lighting adjustments alone. Some objects required 40+ evolution rounds without reaching a keep verdict, suggesting that these failure modes require actions beyond the current space—for example, scene background replacement or global tone mapping adjustments.
 
-**Dataset scale and category coverage.** DataEvolver-Rotate contains 50 objects. While sufficient to demonstrate the pipeline's feasibility and validate downstream utility, this scale does not provide the breadth required for a general rotation editing model. Category coverage is also limited; some specialized or atypical object types may fall outside the distribution covered by this first validation set.
+**Dataset scale and category coverage.** ARIS-Rotate contains 50 objects. While sufficient to demonstrate the pipeline's feasibility and validate downstream utility, this scale does not provide the breadth required for a general rotation editing model. Category coverage is also limited; some specialized or atypical object types may fall outside the distribution covered by this first validation set.
 
-**Rotation-only validation.** We validate DataEvolver on a single editing task (rotation). The pipeline is designed to generalize to other geometry-controlled editing tasks (lighting changes, material substitution, scale variation), but such generalization has not been experimentally verified in this report.
+**Rotation-only validation.** We validate ARIS on a single editing task (rotation). The pipeline is designed to generalize to other geometry-controlled editing tasks (lighting changes, material substitution, scale variation), but such generalization has not been experimentally verified in this report.
 
 **VLM reviewer noise.** The Qwen3.5-35B-A3B reviewer exhibits score variance of approximately 0.006–0.012 per query, which can produce inconsistent verdicts for borderline cases. Repeated review passes or multi-view aggregation can mitigate this, but reviewer reliability remains a variable in pipeline quality.
 
@@ -259,11 +259,11 @@ We evaluate on the object-disjoint test split (10 objects, 70 pairs) using PSNR,
 
 ## 7. Conclusion
 
-We presented DataEvolver, a pipeline for automatically constructing training-ready synthetic datasets for image editing tasks. The central contribution is the free-form VLM-guided rendering evolution loop, in which an AI agent reads natural language feedback from a VLM reviewer and selects rendering parameter adjustments from a structured action space, iterating until the reviewer confirms acceptable quality. This approach replaces manual Blender parameter tuning with an automated feedback cycle, enabling scalable and consistent 3D dataset construction.
+We presented ARIS, a pipeline for automatically constructing training-ready synthetic datasets for image editing tasks. The central contribution is the free-form VLM-guided rendering evolution loop, in which an AI agent reads natural language feedback from a VLM reviewer and selects rendering parameter adjustments from a structured action space, iterating until the reviewer confirms acceptable quality. This approach replaces manual Blender parameter tuning with an automated feedback cycle, enabling scalable and consistent 3D dataset construction.
 
-We instantiated DataEvolver for rotation-conditioned image editing, producing DataEvolver-Rotate: a 50-object, 350-pair dataset with natural-language viewpoint instructions. Ablation experiments confirmed that the evolution loop improves rendering quality over single-pass rendering. LoRA fine-tuning of Qwen Image Edit 2511 on DataEvolver-Rotate demonstrated measurable improvement over the base model on the test set, validating the downstream utility of automatically constructed data.
+We instantiated ARIS for rotation-conditioned image editing, producing ARIS-Rotate: a 50-object, 350-pair dataset with natural-language viewpoint instructions. Ablation experiments confirmed that the evolution loop improves rendering quality over single-pass rendering. LoRA fine-tuning of Qwen Image Edit 2511 on ARIS-Rotate demonstrated measurable improvement over the base model on the test set, validating the downstream utility of automatically constructed data.
 
-**Future work.** Several directions extend this work naturally. First, expanding the action space to cover failure modes currently unresolved (global tone mapping, background replacement) would improve coverage. Second, applying DataEvolver to additional editing tasks—lighting variation, material substitution, scale change—would validate generality. Third, scaling to larger object sets (500+) with broader category coverage would provide the data volume needed for training stronger editing models. Finally, integrating an adaptive round budget that allocates more evolution rounds to harder objects would improve efficiency on large-scale runs.
+**Future work.** Several directions extend this work naturally. First, expanding the action space to cover failure modes currently unresolved (global tone mapping, background replacement) would improve coverage. Second, applying ARIS to additional editing tasks—lighting variation, material substitution, scale change—would validate generality. Third, scaling to larger object sets (500+) with broader category coverage would provide the data volume needed for training stronger editing models. Finally, integrating an adaptive round budget that allocates more evolution rounds to harder objects would improve efficiency on large-scale runs.
 
 ---
 

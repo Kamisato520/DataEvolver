@@ -6,12 +6,12 @@
 
 We first validate that the VLM-guided evolution loop improves rendering quality
 compared to single-pass rendering without iterative refinement.
-We construct two versions of the 50-object DataEvolver-Rotate rendering set:
+We construct two versions of the 50-object ARIS-Rotate rendering set:
 
 \begin{itemize}
   \item \textbf{No-evolution (direct render):} The 3D mesh is inserted into the Blender scene
     and rendered at the default control state without any VLM review or parameter adjustment.
-  \item \textbf{Full pipeline (VLM evolution):} The complete \dataevolver{} loop is applied,
+  \item \textbf{Full pipeline (VLM evolution):} The complete \aris{} loop is applied,
     with the AI agent reading VLM free-form feedback and selecting rendering actions
     until the reviewer issues a keep verdict.
 \end{itemize}
@@ -43,7 +43,7 @@ Full pipeline (VLM evolution, ours)  & \tbd{XX.X} & \tbd{XX.X} & \tbd{X.X} \\
     \vspace{2.5cm}}}
   \caption{
     Qualitative comparison between single-pass rendering (no evolution)
-    and the full \dataevolver{} evolution pipeline.
+    and the full \aris{} evolution pipeline.
     The VLM loop corrects common issues including flat lighting, color shift,
     and missing contact shadows.
   }
@@ -54,7 +54,7 @@ Full pipeline (VLM evolution, ours)  & \tbd{XX.X} & \tbd{XX.X} & \tbd{X.X} \\
 \subsection{LoRA Fine-Tuning Setup}
 \label{sec:exp:lora_setup}
 
-We evaluate the downstream training value of DataEvolver-Rotate by fine-tuning
+We evaluate the downstream training value of ARIS-Rotate by fine-tuning
 Qwen Image Edit 2511~\cite{PLACEHOLDER_qwen_image_edit_verify} with LoRA
 on the training split and evaluating on the test split.
 
@@ -78,7 +78,7 @@ We compare three conditions:
   \item \textbf{LoRA (no-evolution data)}: LoRA fine-tuned on data from
     single-pass rendering (no VLM refinement).
   \item \textbf{LoRA (full pipeline data)}: LoRA fine-tuned on quality-approved data
-    from the full \dataevolver{} evolution pipeline.
+    from the full \aris{} evolution pipeline.
 \end{enumerate}
 
 
@@ -90,7 +90,7 @@ using standard image quality metrics: PSNR, SSIM, and LPIPS~\cite{PLACEHOLDER_zh
 
 \begin{table}[h]
 \caption{
-  Quantitative evaluation of rotation editing quality on the DataEvolver-Rotate test set.
+  Quantitative evaluation of rotation editing quality on the ARIS-Rotate test set.
   $\uparrow$ = higher is better; $\downarrow$ = lower is better.
   Bold denotes best result per metric.
 }
@@ -150,7 +150,7 @@ front-left view  & $315^\circ$ & \tbd{XX.X} & \tbd{XX.X} \\
     \vspace{3cm}}}
   \caption{
     Qualitative comparison of rotation editing results.
-    LoRA fine-tuned on DataEvolver-Rotate data produces more geometrically consistent
+    LoRA fine-tuned on ARIS-Rotate data produces more geometrically consistent
     target views compared to the base model, especially for large rotation angles.
   }
   \label{fig:qual_lora}

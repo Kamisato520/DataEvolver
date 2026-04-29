@@ -1,6 +1,6 @@
 ---
 name: idea-discovery
-description: "Lightweight idea scoping for the current DataEvolver pipeline. Converts a task direction into FINAL_PROPOSAL.md and dataset requirements for synthesis/evaluation."
+description: "Lightweight idea scoping for the current ARIS pipeline. Converts a task direction into FINAL_PROPOSAL.md and dataset requirements for synthesis/evaluation."
 argument-hint: [task-direction]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, Skill
 ---

@@ -23,7 +23,7 @@ class DatasetValidationError(Exception):
 
 def read_jsonl(path: Path) -> List[dict]:
     rows = []
-    with path.open("r", encoding="utf-8") as f:
+    with path.open("r", encoding="utf-8-sig") as f:
         for line_no, line in enumerate(f, start=1):
             line = line.strip()
             if not line:

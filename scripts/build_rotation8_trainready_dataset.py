@@ -60,13 +60,7 @@ def parse_args():
     parser.add_argument(
         "--prompts-json",
         default=None,
-        help="Path to prompts.json for object descriptions (enables instruction with object info)",
-    )
-    parser.add_argument(
-        "--prompt-version",
-        choices=["v3", "v4_dual_degree"],
-        default="v3",
-        help="Instruction template version. Default v3 preserves existing output.",
+        help="Path to stage1 prompts.json containing T2I prompts per object",
     )
     return parser.parse_args()
 
@@ -112,24 +106,13 @@ def _view_name(rotation_deg: int) -> str:
     return VIEW_NAMES.get(rotation_deg, f"{rotation_deg} degree view")
 
 
-def _build_instruction(obj_description: str, target_rotation_deg: int, prompt_version: str) -> str:
-    view_name = _view_name(target_rotation_deg)
-    if prompt_version == "v4_dual_degree":
-        return (
-            f"Rotate this {obj_description} clockwise from front view "
-            f"to {view_name} ({target_rotation_deg} degrees)."
-        )
-    return f"Rotate this {obj_description} clockwise from front view to {view_name}."
-
-
 def build_dataset(
     source_root: Path,
     output_root: Path,
     source_rotation_deg: int,
     target_rotations: List[int],
     copy_mode: str,
-    prompts_map: Optional[Dict[str, str]] = None,
-    prompt_version: str = "v3",
+    prompts_json: Optional[Path] = None,
 ) -> dict:
     source_manifest = load_json(source_root / "manifest.json")
     if not source_manifest:
@@ -138,6 +121,12 @@ def build_dataset(
     objects_payload = source_manifest.get("objects") or {}
     if not objects_payload:
         raise ValueError("No objects found in source manifest")
+
+    prompt_lookup: Dict[str, dict] = {}
+    if prompts_json and prompts_json.exists():
+        prompts_data = load_json(prompts_json, default=[])
+        for entry in prompts_data:
+            prompt_lookup[entry["id"]] = entry
 
     output_root.mkdir(parents=True, exist_ok=True)
     views_root = output_root / "views"
@@ -199,31 +188,29 @@ def build_dataset(
             }
 
         source_record = out_rotations[source_rot_slug]
+        prompt_entry = prompt_lookup.get(obj_id, {})
+        obj_name = prompt_entry.get("name", "object").replace("_", " ")
+        t2i_prompt = prompt_entry.get("prompt", "")
+
         pair_entries = []
         for target_rotation_deg in target_rotations:
             target_slug = _rot_slug(target_rotation_deg)
             target_record = out_rotations[target_slug]
             pair_id = f"{obj_id}_{source_rot_slug}_to_{target_slug}"
-            obj_description = "object"
-            if prompts_map and obj_id in prompts_map:
-                obj_description = prompts_map[obj_id]
-            instruction = _build_instruction(
-                obj_description=obj_description,
-                target_rotation_deg=target_rotation_deg,
-                prompt_version=prompt_version,
-            )
+            instruction = f"Rotate this {obj_name} clockwise from front view to {_view_name(target_rotation_deg)}."
             pair_payload = {
                 "pair_id": pair_id,
                 "obj_id": obj_id,
                 "task_type": "rotation_edit",
                 "split": "train",
-                "prompt_version": prompt_version,
+                "prompt_version": "v3",
                 "source_rotation_deg": source_rotation_deg,
                 "target_rotation_deg": target_rotation_deg,
                 "source_view_name": _view_name(source_rotation_deg),
                 "target_view_name": _view_name(target_rotation_deg),
                 "instruction": instruction,
-                "object_description": obj_description,
+                "object_description": obj_name,
+                "t2i_prompt": t2i_prompt,
                 "source_image": source_record["rgb_path"],
                 "target_image": target_record["rgb_path"],
                 "source_mask": source_record["mask_path"],
@@ -269,6 +256,7 @@ def build_dataset(
                 "target_view_name",
                 "instruction",
                 "object_description",
+                "t2i_prompt",
                 "source_image",
                 "target_image",
                 "source_mask",
@@ -298,7 +286,6 @@ def build_dataset(
         "training_pairs": len(pair_rows),
         "pairs_per_object": len(target_rotations),
         "copy_mode": copy_mode,
-        "prompt_version": prompt_version,
     }
     save_json(output_root / "summary.json", summary)
 
@@ -318,24 +305,13 @@ def main():
     output_root = Path(args.output_dir).resolve()
     target_rotations = [int(item) for item in args.target_rotations.split(",") if item.strip()]
 
-    prompts_map = None
-    if args.prompts_json:
-        with open(args.prompts_json, "r", encoding="utf-8") as f:
-            prompts_data = json.load(f)
-        prompts_map = {
-            obj["id"]: obj["name"].replace("_", " ")
-            for obj in prompts_data
-        }
-        print(f"[Info] Loaded {len(prompts_map)} object descriptions from {args.prompts_json}")
-
     summary = build_dataset(
         source_root=source_root,
         output_root=output_root,
         source_rotation_deg=args.source_rotation_deg,
         target_rotations=target_rotations,
         copy_mode=args.copy_mode,
-        prompts_map=prompts_map,
-        prompt_version=args.prompt_version,
+        prompts_json=Path(args.prompts_json) if args.prompts_json else None,
     )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
