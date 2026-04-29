@@ -479,7 +479,12 @@ def load_vlm(device: str = "cuda:0"):
 
     print(f"[VLM] Loading {VLM_MODEL_NAME} from {VLM_MODEL_PATH} -> {device}")
     from transformers import AutoProcessor, Qwen3_5MoeForConditionalGeneration
+    import transformers.modeling_utils as _mu
     import torch
+
+    # Disable caching_allocator_warmup: it estimates pre-allocation by total
+    # param count (~65GB for 35B MoE) instead of active params (~7GB), causing OOM.
+    _mu.caching_allocator_warmup = lambda *a, **kw: None
 
     _vlm_processor = AutoProcessor.from_pretrained(VLM_MODEL_PATH, trust_remote_code=True)
     load_kwargs = _resolve_vlm_load_kwargs(device)

@@ -1,6 +1,6 @@
 # Claude Review MCP
 
-Bridge Codex-first DataEvolver workflows to the local Claude Code CLI.
+Bridge Codex-first ARIS workflows to the local Claude Code CLI.
 
 ## What it does
 
@@ -46,7 +46,7 @@ codex mcp add claude-review -- ~/.codex/mcp-servers/claude-review/run_with_claud
 ## Notes
 
 - The bridge runs Claude in non-interactive `-p` mode.
-- By default the reviewer gets **no tools**. This matches the original DataEvolver pattern where the external reviewer only sees the prompt context prepared by the executor.
+- By default the reviewer gets **no tools**. This matches the original ARIS pattern where the external reviewer only sees the prompt context prepared by the executor.
 - `threadId` is the native Claude session id and can be passed directly to `review_reply`.
 - `jobId` is a bridge-local background task id stored on disk under `~/.codex/state/claude-review/jobs/` by default, so status can be resumed across MCP server restarts.
 

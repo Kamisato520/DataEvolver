@@ -1,52 +1,67 @@
-# DataEvolver
+# ARIS
 
-DataEvolver 是一个自动化多模态数据集构建流水线，通过自然语言描述驱动 VLM 引导的迭代式 3D 渲染，产出高质量合成训练数据，应用于可控图像编辑任务。
+ARIS 现在是一个**数据集合成 + 评估 VLM 训练**流水线。
 
-当前流水线涵盖六大阶段：文本扩展 -> T2I 图像生成 -> SAM2 前景分割 -> 3D 重建(Hunyuan3D) -> 场景感知 Blender 渲染 -> VLM 审查 + 反馈闭环 -> 元数据合并。
+当前目标（精简后）只有 4 步：
 
-核心创新：**自由形式 VLM 引导的渲染进化闭环**——VLM 用自然语言审查渲染质量，AI agent 读取反馈并自动调整渲染参数，直至达到质量标准。
+1. 保留 **Workflow 1（Idea 发现 + 方案精炼）**，并把数据集检索/评估放在 Workflow 1 的中间阶段。
+2. 若数据不足，走合成补齐：
+   - Blender 路径
+   - T2I 路径
+   - 双路径（推荐）
+3. 合成后做质检与过滤，生成门禁清单。
+4. 在现有 VLM（使用Qwen3vl） 基础上微调，让 VLM 具备你定义指标的评估能力。
+
+工作流结构：
+
+- Workflow 1：`/idea-discovery -> （中间数据集评估）-> 精炼方案`
+- Workflow 2：`/dataset-synthesis-gate`（正式合成 + 质检 + 门禁）
+- Workflow 3：`/experiment-bridge`（评估型 VLM）
+- Workflow 4：`/analyze-results`
 
 ## 核心 Skills
 
-- `skills/dataset-synthesis-gate/` — 双路径合成 + 质检 + 门禁
-- `skills/dataset-eval-pipeline/` — 端到端数据集评估流水线
-- `skills/experiment-bridge/` — 评估型 VLM 微调实验
-- `skills/analyze-results/` — 结果分析与报告
-- `skills/research-pipeline/` — 总编排（可选）
+- `skills/dataset-synthesis-gate/`
+- `skills/dataset-eval-pipeline/`
+- `skills/experiment-bridge/`
+- `skills/analyze-results/`
+- `skills/research-pipeline/`（可选总编排）
 
-## 研究工作流
+## 关键产物
 
-| 工作流 | 命令 | 说明 |
-|--------|------|------|
-| 1: Idea 发现 | `/idea-discovery` | 文献调研 -> 头脑风暴 -> 查新 -> 试点 -> 精炼 -> 实验计划 |
-| 2: 自动审查回路 | `/auto-review-loop` | 外部 LLM 审查 -> 修复 -> 实验 -> 重新审查（最多 4 轮） |
-| 3: 论文写作 | `/paper-writing` | 叙事 -> 大纲 -> 图表 -> LaTeX -> PDF -> 自动改进 |
-| 端到端 | `/research-pipeline` | 工作流 1-3 顺序执行 |
+- `refine-logs/dataset_manifest.json`
+- `refine-logs/DATASET_READINESS.md`
+- `refine-logs/RENDER_QC_REPORT.md`
+- `refine-logs/EVAL_MODEL_SPEC.md`
+- `refine-logs/EVAL_MODEL_EXPERIMENT_PLAN.md`
+- `refine-logs/EVAL_BENCHMARK_REPORT.md`
 
-## 安装与快速开始
+## 安装与 API 接入
+
+请直接看：
+
+- `refine-logs/MIGRATED_SETUP_API_GUIDE.md`
+
+其中包含：
+
+- 本地环境安装
+- Blender/T2I 配置
+- 双模型评估（Claude + GPT）API wrapper 接入
+- 验证方法是否生效的检查清单
+
+## 入口命令
+
+优先用 skill：
+
+- `/dataset-eval-pipeline "你的任务"`
+
+脚本方式：
 
 ```bash
-git clone https://github.com/your-org/DataEvolver.git
-cd DataEvolver
-
-# 安装所有技能
-cp -r skills/* ~/.claude/skills/
-
-# 运行数据构建流水线
-python pipeline/stage1_text_expansion.py
-bash pipeline/stage4_batch_render.sh
-
-# 使用 skill 入口
-/research-pipeline "你的研究方向"
+python skills/dataset-synthesis-gate/scripts/dataset_readiness_gate.py \
+  --idea-path refine-logs/FINAL_PROPOSAL.md \
+  --synthesis-mode dual \
+  --blender-config-path skills/dataset-synthesis-gate/configs/blender_render.user.template.json \
+  --t2i-config-path skills/dataset-synthesis-gate/configs/t2i_generation.user.template.json \
+  --reports-dir refine-logs
 ```
-
-## 关键文档
-
-- `docs/FEEDBACK_LOOP_FRAMEWORK.md` — 反馈闭环架构
-- `docs/feedback_loop_internals.md` — 内部实现参考
-- `docs/server_reference.md` — 服务器环境配置
-- `arxiv_report/paper/tech_report_tex/` — 技术报告 LaTeX 源码
-
-## 许可
-
-MIT License — 详见 [LICENSE](LICENSE) 文件。

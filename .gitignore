@@ -17,32 +17,30 @@ __pycache__/
 # Environment
 .env
 
-# Project specific - generated data
-*.log
-*.zip
+# Large / generated / external
+_tmp/
+_remote_artifacts/
+_remote_patch/
+runtime/
+refine-logs/
+remote_results/
+DiffSynth-Studio/
+feishu-claude-code/
+agent_loop_v72_upload/
+objects/
+plan-list/
+docs/logs/
+scripts/images/
+scripts/images_rgba/
+notion-weekly/
+*.safetensors
+*.ckpt
+*.bin
+*.pt
 *.png
 *.jpg
 *.jpeg
-*.gif
-*.bmp
-*.safetensors
-*.bin
-*.pth
-*.pt
-*.ckpt
-*.onnx
-*.h5
-*.pb
-*.msgpack
-*.tgz
-*.tar.gz
 
-# Blender
-*.blend1
-*.blend2
-
-# Jupyter
-.ipynb_checkpoints/
-
-# Conda
-env/
+# Claude Code
+.claude/
+.plan

@@ -71,7 +71,7 @@ def build_frontmatter(name: str, description: str) -> str:
 
 
 def normalize_description(text: str) -> str:
-    text = text or "Claude-review override for a Codex-native DataEvolver skill."
+    text = text or "Claude-review override for a Codex-native ARIS skill."
     text = text.replace("GPT using a secondary Codex agent", "Claude via claude-review MCP")
     text = text.replace("using a secondary Codex agent", "using Claude Code via claude-review MCP")
     text = text.replace("via GPT-5.4 xhigh review", "via Claude review through claude-review MCP")

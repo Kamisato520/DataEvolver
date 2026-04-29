@@ -1,7 +1,7 @@
 \section{Limitations}
 \label{sec:limitations}
 
-We discuss the current limitations of DataEvolver and directions for future improvement.
+We discuss the current limitations of \aris{} and directions for future improvement.
 
 \paragraph{Action space coverage.}
 The current 24-action discrete action space has limited coverage of certain failure modes.
@@ -13,14 +13,14 @@ suggesting that these failure modes require actions beyond the current space---
 for example, scene background replacement or global tone mapping adjustments.
 
 \paragraph{Dataset scale and category coverage.}
-DataEvolver-Rotate contains 50 objects.
+ARIS-Rotate contains 50 objects.
 While sufficient to demonstrate the pipeline's feasibility and validate downstream utility,
 this scale does not provide the breadth required for a general rotation editing model.
 Category coverage is also limited; some specialized or atypical object types
 may fall outside the distribution covered by this first validation set.
 
 \paragraph{Rotation-only validation.}
-We validate DataEvolver on a single editing task (rotation).
+We validate \aris{} on a single editing task (rotation).
 The pipeline is designed to generalize to other geometry-controlled editing tasks
 (lighting changes, material substitution, scale variation),
 but such generalization has not been experimentally verified in this report.

@@ -72,18 +72,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-DataEvolver is a multi-project repository containing:
+ARIS is a multi-project repository containing:
 
-1. **Main DataEvolver Pipeline**: VLM training pipeline for dataset synthesis and evaluation
+1. **Main ARIS Pipeline**: VLM training pipeline for dataset synthesis and evaluation
 2. **feishu-claude-code**: Feishu bot that bridges to local Claude Code CLI
 3. **obsidian-skills**: Agent Skills for Obsidian integration
 4. **mcp-servers**: MCP server implementations (claude-review, feishu-bridge, llm-chat, minimax-chat)
-5. **skills**: Custom DataEvolver pipeline skills following Agent Skills specification
+5. **skills**: Custom ARIS pipeline skills following Agent Skills specification
 
 ## Project Structure
 
 ```
-DataEvolver/
+ARIS/
 ├── feishu-claude-code/     # Feishu bot (Python, has own .git)
 │   ├── main.py             # Entry point with WebSocket event loop
 │   ├── feishu_client.py    # Feishu API wrapper
@@ -96,7 +96,7 @@ DataEvolver/
 │   ├── feishu-bridge/
 │   ├── llm-chat/
 │   └── minimax-chat/
-├── skills/                 # DataEvolver pipeline skills
+├── skills/                 # ARIS pipeline skills
 │   ├── dataset-eval-pipeline/
 │   ├── dataset-synthesis-gate/
 │   ├── experiment-bridge/
@@ -135,7 +135,7 @@ sudo systemctl enable feishu-claude
 sudo systemctl start feishu-claude
 ```
 
-### DataEvolver Pipeline Skills
+### ARIS Pipeline Skills
 
 Skills are invoked via slash commands in Claude Code:
 
@@ -177,7 +177,7 @@ codex mcp add claude-review -- python3 ~/.codex/mcp-servers/claude-review/server
 - Watchdog thread restarts process every 4 hours to prevent WebSocket staleness
 - Per-user message queue locks prevent concurrent session creation
 
-### DataEvolver Pipeline Workflows
+### ARIS Pipeline Workflows
 
 The main pipeline follows a 4-workflow structure:
 
@@ -329,7 +329,7 @@ All skills follow the [Agent Skills specification](https://agentskills.io/specif
 - **feishu-claude-code** has its own git repository (submodule or separate clone)
 - **obsidian-skills** has its own git repository (submodule or separate clone)
 - Python projects use virtual environments (`.venv/`)
-- The main DataEvolver directory is NOT a git repository (no `.git` at root)
+- The main ARIS directory is NOT a git repository (no `.git` at root)
 - Skills can be invoked from Claude Code using `/skill-name` syntax
 - MCP servers extend tool capabilities for both Claude Code and Codex
 - Codex是你评级的reviewer，你可以和它进行多轮探讨并完善plan后再进行操作

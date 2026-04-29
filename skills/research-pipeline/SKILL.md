@@ -1,11 +1,11 @@
 ---
 name: research-pipeline
-description: "Current DataEvolver top-level pipeline: Workflow 1 (idea discovery + plan refinement with in-between dataset evaluation) -> synthesis/QC gate -> evaluator VLM experiments -> analysis."
+description: "Current ARIS top-level pipeline: Workflow 1 (idea discovery + plan refinement with in-between dataset evaluation) -> synthesis/QC gate -> evaluator VLM experiments -> analysis."
 argument-hint: [task-direction]
 allowed-tools: Bash(*), Read, Write, Edit, Grep, Glob, Agent, Skill
 ---
 
-# Current DataEvolver Pipeline
+# Current ARIS Pipeline
 
 Run end-to-end for: **$ARGUMENTS**
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Feishu Bridge Server — provides HTTP API for DataEvolver skills to send messages
+Feishu Bridge Server — provides HTTP API for ARIS skills to send messages
 to Feishu and poll for user replies.
 
 Endpoints:
@@ -182,7 +182,7 @@ class BridgeHandler(BaseHTTPRequestHandler):
                 return
 
             msg_type = body.get("type", "card")
-            title = body.get("title", "DataEvolver Notification")
+            title = body.get("title", "ARIS Notification")
             content = body.get("body", body.get("content", ""))
             color = body.get("color", "blue")
 

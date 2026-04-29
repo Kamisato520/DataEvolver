@@ -194,6 +194,9 @@ def run_agent_step(
         p.name.endswith(".png") and not p.name.endswith("_mask.png")
         for p in obj_render_dir.iterdir()
     )
+    render_metadata = load_json(obj_render_dir / "metadata.json", default={}) if obj_render_dir.is_dir() else {}
+    if not isinstance(render_metadata, dict):
+        render_metadata = {}
     if not (ok and has_renders):
         result = {
             "success": False,
@@ -204,6 +207,8 @@ def run_agent_step(
             "render_dir": str(render_dir),
             "review_agg_path": None,
             "actions": action_results,
+            "material_adaptation": render_metadata.get("material_adaptation"),
+            "mesh_material_quality": render_metadata.get("mesh_material_quality"),
             "agent_note": agent_note,
             "elapsed_seconds": round(time.time() - started, 3),
             "error": "render_failed",
@@ -245,6 +250,10 @@ def run_agent_step(
         "hybrid_score": review.get("hybrid_score"),
         "vlm_only_score": review.get("vlm_only_score"),
         "lighting_diagnosis": review.get("lighting_diagnosis"),
+        "asset_viability": review.get("asset_viability"),
+        "abandon_reason": review.get("abandon_reason"),
+        "material_adaptation": render_metadata.get("material_adaptation"),
+        "mesh_material_quality": render_metadata.get("mesh_material_quality"),
         "issue_tags": review.get("issue_tags"),
         "suggested_actions": review.get("suggested_actions"),
         "actions": action_results,

@@ -19,7 +19,7 @@ SPLITS = ("train", "val", "test")
 def read_json(path: Path, default=None):
     if not path.exists():
         return default
-    with path.open("r", encoding="utf-8") as f:
+    with path.open("r", encoding="utf-8-sig") as f:
         return json.load(f)
 
 
@@ -31,7 +31,7 @@ def write_json(path: Path, payload: dict) -> None:
 
 def read_jsonl(path: Path) -> List[dict]:
     rows = []
-    with path.open("r", encoding="utf-8") as f:
+    with path.open("r", encoding="utf-8-sig") as f:
         for line in f:
             line = line.strip()
             if line:
@@ -143,11 +143,12 @@ def extract_objects(rows: Iterable[dict]) -> List[str]:
 def build_augmented_dataset(
     *,
     baseline_split_root: Path,
-    new_trainready_root: Path,
+    new_trainready_root: Optional[Path],
     output_root: Path,
     pinned_split_path: Path,
     allowed_target_rotations: Optional[set[int]],
     asset_mode: str,
+    retire_object_ids: Optional[set[str]] = None,
 ) -> dict:
     baseline_split_root = baseline_split_root.resolve()
     new_trainready_root = new_trainready_root.resolve()
@@ -164,7 +165,24 @@ def build_augmented_dataset(
             if expected and expected != split:
                 raise ValueError(f"Pinned object {obj_id} is in {split}, expected {expected}")
 
-    new_rows = load_new_train_rows(new_trainready_root)
+    retired_pairs_count = 0
+    if retire_object_ids:
+        before = len(baseline_rows["train"])
+        baseline_rows["train"] = [
+            row for row in baseline_rows["train"]
+            if str(row.get("obj_id")) not in retire_object_ids
+        ]
+        retired_pairs_count = before - len(baseline_rows["train"])
+        if retired_pairs_count:
+            print(f"  [retire] Removed {retired_pairs_count} train pairs from "
+                  f"{len(retire_object_ids)} retired objects: {sorted(retire_object_ids)}")
+        val_retired = [row for row in baseline_rows["val"]
+                       if str(row.get("obj_id")) in retire_object_ids]
+        if val_retired:
+            print(f"  [WARN] {len(val_retired)} val pairs belong to retired objects "
+                  f"(kept to preserve eval baseline)")
+
+    new_rows = load_new_train_rows(new_trainready_root) if new_trainready_root else []
     filtered_new_rows = []
     skipped_rows = []
     for row in new_rows:
@@ -179,7 +197,7 @@ def build_augmented_dataset(
         updated["split"] = "train"
         filtered_new_rows.append(updated)
 
-    if not filtered_new_rows:
+    if not filtered_new_rows and not retire_object_ids:
         raise ValueError("No new train rows remain after target-rotation filtering")
 
     output_root.mkdir(parents=True, exist_ok=True)
@@ -241,11 +259,13 @@ def build_augmented_dataset(
         "schema_version": "augmented_rotation_dataset_v1",
         "created_at": time.strftime("%Y-%m-%d %H:%M:%S"),
         "baseline_split_root": str(baseline_split_root),
-        "new_trainready_root": str(new_trainready_root),
+        "new_trainready_root": str(new_trainready_root) if new_trainready_root else None,
         "output_root": str(output_root),
         "pinned_split_path": str(pinned_split_path.resolve()),
         "asset_mode": asset_mode,
         "new_object_ids": new_objects,
+        "retired_object_ids": sorted(retire_object_ids) if retire_object_ids else [],
+        "retired_pairs_removed": retired_pairs_count,
         "weak_target_rotations": sorted(allowed_target_rotations) if allowed_target_rotations else sorted(
             {int(row["target_rotation_deg"]) for row in filtered_new_rows}
         ),
@@ -270,23 +290,42 @@ def build_augmented_dataset(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build augmented rotation train-ready dataset")
     parser.add_argument("--baseline-split-root", required=True)
-    parser.add_argument("--new-trainready-root", required=True)
+    parser.add_argument("--new-trainready-root", default=None,
+                        help="New train-ready root to merge (optional if only retiring)")
     parser.add_argument("--output-dir", required=True)
     parser.add_argument("--pinned-split-path", required=True)
     parser.add_argument("--target-rotations", default=None, help="Optional comma-separated weak target rotations")
     parser.add_argument("--asset-mode", choices=["symlink", "copy"], default="copy")
+    parser.add_argument("--retire-objects", default=None,
+                        help="JSON file with list of obj_ids to remove from train split")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
+
+    retire_ids = None
+    if args.retire_objects:
+        retire_path = Path(args.retire_objects)
+        if retire_path.exists():
+            retire_data = read_json(retire_path, default=[])
+            if isinstance(retire_data, list):
+                retire_ids = set(str(x) for x in retire_data)
+            elif isinstance(retire_data, dict):
+                retire_ids = set(str(x) for x in retire_data.get("retired_objects", []))
+
+    new_root = Path(args.new_trainready_root) if args.new_trainready_root else None
+    if not new_root and not retire_ids:
+        raise ValueError("At least one of --new-trainready-root or --retire-objects is required")
+
     manifest = build_augmented_dataset(
         baseline_split_root=Path(args.baseline_split_root),
-        new_trainready_root=Path(args.new_trainready_root),
+        new_trainready_root=new_root,
         output_root=Path(args.output_dir),
         pinned_split_path=Path(args.pinned_split_path),
         allowed_target_rotations=parse_rotations(args.target_rotations),
         asset_mode=args.asset_mode,
+        retire_object_ids=retire_ids,
     )
     print(json.dumps(manifest, indent=2, ensure_ascii=False))
     return 0

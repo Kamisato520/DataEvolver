@@ -22,6 +22,8 @@ import re
 import sys
 import os
 import argparse
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Optional
 
@@ -770,33 +772,124 @@ def _create_anthropic_client():
     return anthropic.Anthropic(api_key=api_key)
 
 
-def call_claude_api(concept_name: str, model: str) -> dict:
-    """Call Anthropic Claude API for one concept."""
-    client = _create_anthropic_client()
-    human_name = concept_name.replace("_", " ")
+def _stage1_api_key() -> Optional[str]:
+    return os.environ.get("STAGE1_API_KEY") or os.environ.get("ANTHROPIC_API_KEY")
 
+
+def _anthropic_messages_endpoint(base_url: str) -> str:
+    endpoint = str(base_url).rstrip("/")
+    if endpoint.endswith("/v1/messages"):
+        return endpoint
+    if endpoint.endswith("/v1"):
+        return endpoint + "/messages"
+    return endpoint + "/v1/messages"
+
+
+def _call_anthropic_messages_http(
+    *,
+    model: str,
+    system_prompt: str,
+    user_prompt: str,
+    max_tokens: int,
+    base_url: str,
+    timeout: float,
+) -> str:
+    api_key = _stage1_api_key()
+    if not api_key:
+        raise SystemExit("[Stage 1] STAGE1_API_KEY or ANTHROPIC_API_KEY is required for relay API calls")
+
+    body = {
+        "model": model,
+        "max_tokens": max_tokens,
+        "temperature": 0.7,
+        "system": system_prompt,
+        "messages": [{"role": "user", "content": user_prompt}],
+    }
+    request = urllib.request.Request(
+        _anthropic_messages_endpoint(base_url),
+        data=json.dumps(body).encode("utf-8"),
+        headers={
+            "x-api-key": api_key,
+            "Authorization": f"Bearer {api_key}",
+            "anthropic-version": "2023-06-01",
+            "Content-Type": "application/json",
+            "User-Agent": "curl/8.5.0",
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=float(timeout)) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")
+        raise SystemExit(f"[Stage 1] Anthropic-compatible relay failed: HTTP {exc.code}\n{detail}") from exc
+    except urllib.error.URLError as exc:
+        raise SystemExit(f"[Stage 1] Anthropic-compatible relay failed: {exc}") from exc
+
+    parts = []
+    for item in payload.get("content") or []:
+        if isinstance(item, dict) and item.get("type") == "text" and item.get("text"):
+            parts.append(str(item["text"]))
+    text = "".join(parts) or str(payload.get("text") or "")
+    if not text:
+        raise SystemExit("[Stage 1] Relay returned no text content")
+    return text
+
+
+def call_claude_api(concept_name: str, model: str, api_base_url: Optional[str] = None, api_timeout: float = 300) -> dict:
+    """Call Anthropic Claude API for one concept."""
+    human_name = concept_name.replace("_", " ")
+    user_prompt = USER_TEMPLATE.format(concept=human_name)
+
+    if api_base_url:
+        response_text = _call_anthropic_messages_http(
+            model=model,
+            system_prompt=SYSTEM_PROMPT,
+            user_prompt=user_prompt,
+            max_tokens=512,
+            base_url=api_base_url,
+            timeout=api_timeout,
+        )
+        print(f"  [Relay API response snippet] {response_text[:200]}")
+        return parse_response(response_text)
+
+    client = _create_anthropic_client()
     message = client.messages.create(
         model=model,
         max_tokens=512,
         system=SYSTEM_PROMPT,
-        messages=[
-            {"role": "user", "content": USER_TEMPLATE.format(concept=human_name)}
-        ],
+        messages=[{"role": "user", "content": user_prompt}],
     )
     response_text = message.content[0].text
     print(f"  [API response snippet] {response_text[:200]}")
     return parse_response(response_text)
 
 
-def call_claude_repair_api(repair_spec: dict, model: str) -> dict:
+def call_claude_repair_api(
+    repair_spec: dict,
+    model: str,
+    api_base_url: Optional[str] = None,
+    api_timeout: float = 300,
+) -> dict:
+    user_prompt = build_repair_user_prompt(repair_spec)
+    if api_base_url:
+        response_text = _call_anthropic_messages_http(
+            model=model,
+            system_prompt=REPAIR_SYSTEM_PROMPT,
+            user_prompt=user_prompt,
+            max_tokens=700,
+            base_url=api_base_url,
+            timeout=api_timeout,
+        )
+        print(f"  [Repair relay API response snippet] {response_text[:200]}")
+        return parse_response(response_text)
+
     client = _create_anthropic_client()
     message = client.messages.create(
         model=model,
         max_tokens=700,
         system=REPAIR_SYSTEM_PROMPT,
-        messages=[
-            {"role": "user", "content": build_repair_user_prompt(repair_spec)}
-        ],
+        messages=[{"role": "user", "content": user_prompt}],
     )
     response_text = message.content[0].text
     print(f"  [Repair API response snippet] {response_text[:200]}")
@@ -809,6 +902,9 @@ def main():
                         help="Skip API, use placeholder text (for testing pipeline)")
     parser.add_argument("--model", default="claude-haiku-4-5",
                         help="Anthropic model to use (default: claude-haiku-4-5)")
+    parser.add_argument("--api-provider", choices=["anthropic"], default=os.environ.get("STAGE1_API_PROVIDER"))
+    parser.add_argument("--api-base-url", default=os.environ.get("STAGE1_API_BASE_URL") or os.environ.get("ANTHROPIC_BASE_URL"))
+    parser.add_argument("--api-timeout", type=float, default=float(os.environ.get("STAGE1_API_TIMEOUT", "300")))
     parser.add_argument("--ids", default=None,
                         help="Comma-separated object IDs to generate (default: all seed concepts)")
     parser.add_argument("--output-file", default=str(OUTPUT_FILE),
@@ -840,7 +936,12 @@ def main():
         if args.template_only or args.scene_conditioned or args.dry_run:
             repaired = build_failure_aware_prompt(repair_spec, SCENE_PROFILE_4BLEND)
         else:
-            parsed = call_claude_repair_api(repair_spec, args.model)
+            parsed = call_claude_repair_api(
+                repair_spec,
+                args.model,
+                api_base_url=args.api_base_url,
+                api_timeout=args.api_timeout,
+            )
             obj_id, concept_name, category = get_seed_concept(
                 obj_id=_coerce_text(repair_spec.get("id")) or None,
                 concept_name=_coerce_text(repair_spec.get("name")) or None,
@@ -908,7 +1009,12 @@ def main():
     for obj_id, name, category in selected:
         human_name = name.replace("_", " ")
         print(f"\n[Stage 1] Expanding concept: {human_name} ({obj_id})")
-        expanded = call_claude_api(name, args.model)
+        expanded = call_claude_api(
+            name,
+            args.model,
+            api_base_url=args.api_base_url,
+            api_timeout=args.api_timeout,
+        )
         results.append({
             "id":       obj_id,
             "name":     name,

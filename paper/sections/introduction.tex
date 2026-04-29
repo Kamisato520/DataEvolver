@@ -21,7 +21,7 @@ fixed controllers that select rendering adjustments based on numeric thresholds-
 that lack the semantic understanding needed to diagnose and resolve complex visual failures.
 
 \paragraph{Our approach.}
-We propose \dataevolver{}, a pipeline in which rendering quality is improved through
+We propose \aris{}, a pipeline in which rendering quality is improved through
 a \emph{free-form VLM-guided evolution loop}.
 Rather than relying on structured scores or fixed rules,
 we employ a vision-language model (VLM) to review rendered scenes using natural language,
@@ -37,17 +37,17 @@ once the pipeline is validated, large-scale dataset construction no longer requi
 per-object expert tuning, reducing cost and improving consistency.
 
 \paragraph{Instantiation: view-controlled rotation editing.}
-We instantiate \dataevolver{} for a concrete and evaluable task:
+We instantiate \aris{} for a concrete and evaluable task:
 constructing a dataset for \emph{rotation-conditioned image editing},
 where a model must rotate an object from a canonical front view to a target viewpoint
 specified in natural language (e.g., \textit{``right side view''}, \textit{``back-left view''}).
-We construct \textbf{DataEvolver-Rotate}, comprising 50 objects $\times$ 8 horizontal viewpoints,
+We construct \textbf{ARIS-Rotate}, comprising 50 objects $\times$ 8 horizontal viewpoints,
 yielding 350 editing pairs for training.
 
 \paragraph{Results.}
 Ablation experiments show that the VLM evolution loop substantially
 improves rendering quality compared to single-pass rendering without iterative refinement.
-LoRA fine-tuning of Qwen Image Edit 2511 on DataEvolver-Rotate improves over the base model
+LoRA fine-tuning of Qwen Image Edit 2511 on ARIS-Rotate improves over the base model
 on PSNR, SSIM, and LPIPS, confirming that automatically constructed data
 has downstream training value.
 Comparing LoRA trained on refined data versus unrefined data further demonstrates
@@ -66,7 +66,7 @@ that the evolution loop produces data of higher utility.
     per-object adjustment of lighting, placement, material, and scene parameters
     through 24 structured atomic actions.
 
-  \item \textbf{DataEvolver-Rotate dataset and validation.}
+  \item \textbf{ARIS-Rotate dataset and validation.}
     We construct a 50-object, 350-pair rotation editing dataset with
     natural-language viewpoint prompts, and validate its training utility
     via LoRA fine-tuning on Qwen Image Edit 2511.
