@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ARIS — Free-Form VLM-Guided Synthetic Data Construction</title>
-<meta name="description" content="ARIS: Autonomous Rendering with Iterative Scene-aware feedback. A fully automated pipeline for constructing training-ready synthetic datasets for image editing.">
+<title>DataEvolver — Let Your Data Build and Improve Itself via Goal-Driven Loop Agents</title>
+<meta name="description" content="DataEvolver: Let Your Data Build and Improve Itself via Goal-Driven Loop Agents. An autonomous synthetic data construction framework powered by goal-driven AI agents that iteratively refine rendering quality through VLM feedback loops.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -420,7 +420,7 @@ code{
 <nav class="nav">
   <div class="nav-inner">
     <a href="#" class="nav-logo">
-      <span class="logo-dot"></span>ARIS
+      <span class="logo-dot"></span>DataEvolver
     </a>
     <ul class="nav-links">
       <li><a href="#pipeline">Pipeline</a></li>
@@ -444,9 +444,9 @@ code{
     <div class="hero-badge">
       <span class="badge-dot"></span>Technical Report &middot; 2026
     </div>
-    <h1>Free-Form VLM-Guided Synthetic Data Construction</h1>
+    <h1>Let Your Data Build and Improve Itself via Goal-Driven Loop Agents</h1>
     <p class="hero-subtitle">
-      ARIS (Autonomous Rendering with Iterative Scene-aware feedback) is a fully automated pipeline that transforms natural-language object descriptions into training-ready, quality-verified image editing datasets — powered by an AI agent that reads VLM feedback and iteratively refines 3D scene renders.
+      DataEvolver is an autonomous synthetic data construction framework where <em>goal-driven loop agents</em> orchestrate the full pipeline — from text-to-image generation through 3D reconstruction to scene-aware rendering — and iteratively refine output quality by reading VLM feedback, diagnosing visual failures, and adjusting rendering parameters until the data meets production standards.
     </p>
     <div class="hero-actions">
       <a href="https://github.com/Kamisato520/DataEvolver" class="btn btn-primary" target="_blank" rel="noopener">
@@ -454,7 +454,7 @@ code{
         GitHub
       </a>
       <a href="#pipeline" class="btn btn-outline">How It Works</a>
-      <a href="paper/ARIS_technical_report.pdf" class="btn btn-outline">Read Paper</a>
+      <a href="paper/DataEvolver_technical_report.pdf" class="btn btn-outline">Read Paper</a>
     </div>
     <div class="hero-stats">
       <div>
@@ -481,9 +481,9 @@ code{
 <section class="section" style="background:var(--bg-primary)">
   <div class="section-inner">
     <div class="section-label">The Problem</div>
-    <h2 class="section-title">Why Synthetic Data Pipelines Need AI-Driven Quality Control</h2>
+    <h2 class="section-title">Why Goal-Driven Agents Are the Missing Piece in Synthetic Data</h2>
     <p class="section-desc">
-      Naive 3D rendering produces artifacts — flat lighting, color shifts, floating objects, missing shadows. Traditional quality control relies on rigid scoring rules that lack semantic understanding. Manual Blender tuning doesn't scale to hundreds of objects.
+      Naive automated rendering produces artifacts — flat lighting, color shifts, floating objects, missing shadows. Traditional pipelines rely on rigid scoring rules that lack semantic understanding. Manual tuning doesn't scale. What's needed are <em>goal-driven agents</em> that can perceive, diagnose, and act — closing the loop between data generation and quality control.
     </p>
 
     <div class="card-grid">
@@ -498,8 +498,8 @@ code{
         <div class="card-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-warning)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         </div>
-        <h3 class="card-title">Rule-Based QC Doesn't Understand</h3>
-        <p class="card-desc">Rigid numeric thresholds can't diagnose "this lighting feels flat" or "the object appears to float" — you need semantic understanding.</p>
+        <h3 class="card-title">Rule-Based QC Lacks Semantics</h3>
+        <p class="card-desc">Rigid numeric thresholds can't diagnose "this lighting feels flat" or "the object appears to float." Goal-driven agents with VLM perception can.</p>
       </div>
       <div class="card">
         <div class="card-icon">
@@ -516,9 +516,9 @@ code{
 <section class="section" id="pipeline">
   <div class="section-inner">
     <div class="section-label">Pipeline</div>
-    <h2 class="section-title">The 6-Stage Data Construction Pipeline</h2>
+    <h2 class="section-title">The Goal-Driven Data Construction Pipeline</h2>
     <p class="section-desc">
-      From a natural language seed concept to quality-verified rendered pairs — fully automated, no human intervention required between stages.
+      From a natural language seed concept to quality-verified rendered pairs — fully automated by goal-driven loop agents, no human intervention required between stages.
     </p>
 
     <div class="pipeline-visual">
@@ -565,9 +565,9 @@ code{
 <section class="section" id="evolution" style="background:var(--bg-primary)">
   <div class="section-inner">
     <div class="section-label">Core Innovation</div>
-    <h2 class="section-title">The VLM-Guided Rendering Evolution Loop</h2>
+    <h2 class="section-title">Goal-Driven Loop Agents: Perceive, Diagnose, Act, Repeat</h2>
     <p class="section-desc">
-      The heart of ARIS: not a scripted parameter scan, but an AI agent that truly <em>reads</em> free-form VLM feedback, understands semantic critiques like "flat lighting" or "weak grounding," and selects targeted rendering adjustments from a structured action space.
+      The heart of DataEvolver: not a scripted parameter scan, but a <em>goal-driven loop agent</em> that perceives rendered outputs via VLM review, diagnoses semantic issues like "flat lighting" or "weak grounding," selects targeted rendering adjustments from a structured action space, and repeats until quality goals are met.
     </p>
 
     <div class="loop-diagram">
@@ -631,7 +631,7 @@ code{
 <section class="section" id="dataset">
   <div class="section-inner">
     <div class="section-label">Dataset</div>
-    <h2 class="section-title">ARIS-Rotate: View-Controlled Rotation Editing</h2>
+    <h2 class="section-title">DataEvolver-Rotate: View-Controlled Rotation Editing</h2>
     <p class="section-desc">
       A benchmark dataset for rotation-conditioned image editing. Each sample pairs a canonical front-view image with a target view specified in natural language.
     </p>
@@ -657,7 +657,7 @@ code{
 
     <div class="code-block">
       <div class="code-block-header">
-        <span class="code-block-lang">Python — Load ARIS-Rotate Dataset</span>
+        <span class="code-block-lang">Python — Load DataEvolver-Rotate Dataset</span>
       </div>
       <div class="code-block-body">
 <pre><span style="color:var(--text-tertiary)">import</span> json
@@ -723,10 +723,10 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
 <!-- Key Highlights -->
 <section class="section">
   <div class="section-inner">
-    <div class="section-label">Why ARIS</div>
+    <div class="section-label">Why DataEvolver</div>
     <h2 class="section-title">Key Differentiators</h2>
     <p class="section-desc">
-      What sets ARIS apart from other synthetic data pipelines and why it produces better training data.
+      What sets DataEvolver apart from other synthetic data pipelines and why goal-driven loop agents produce better training data.
     </p>
 
     <div class="card-grid">
@@ -749,7 +749,7 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
         </div>
         <h3 class="card-title">Proven Downstream Value</h3>
-        <p class="card-desc">LoRA fine-tuning on ARIS-Rotate demonstrably improves Qwen Image Edit 2511 on PSNR, SSIM, and LPIPS vs. the base model, confirming real training utility.</p>
+        <p class="card-desc">LoRA fine-tuning on DataEvolver-Rotate demonstrably improves Qwen Image Edit 2511 on PSNR, SSIM, and LPIPS vs. the base model, confirming real training utility.</p>
       </div>
       <div class="card">
         <div class="card-icon" style="background:rgba(217,119,6,0.1)">
@@ -767,7 +767,7 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
   <div class="section-inner">
     <div class="section-label">Tech Stack</div>
     <h2 class="section-title">Built With</h2>
-    <p class="section-desc">The models, frameworks, and infrastructure powering the ARIS pipeline.</p>
+    <p class="section-desc">The models, frameworks, and infrastructure powering the DataEvolver pipeline.</p>
 
     <div style="display:flex;flex-wrap:wrap;gap:12px">
       <span style="background:var(--bg-surface);border:1px solid var(--border);border-radius:20px;padding:8px 18px;font-size:0.8125rem;font-family:var(--font-mono);color:var(--text-secondary)">Python 3.10+</span>
@@ -792,7 +792,7 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
     <div class="section-label">Get Started</div>
     <h2 class="section-title">Quick Start</h2>
     <p class="section-desc">
-      ARIS is designed to run on a Linux server with GPU access and Blender. Clone the repo and explore the pipeline.
+      DataEvolver is designed to run on a Linux server with GPU access and Blender. Clone the repo and start building self-improving data pipelines.
     </p>
 
     <div class="code-block">
@@ -828,7 +828,7 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
     <div class="section-label">Cite</div>
     <h2 class="section-title">Citation</h2>
     <p class="section-desc" style="margin:0 auto 32px">
-      If you use ARIS or ARIS-Rotate in your research, please cite our work.
+      If you use DataEvolver or DataEvolver-Rotate in your research, please cite our work.
     </p>
 
     <div class="code-block" style="text-align:left;max-width:720px;margin:0 auto">
@@ -836,9 +836,9 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
         <span class="code-block-lang">BibTeX</span>
       </div>
       <div class="code-block-body">
-<pre>@misc{aris2026,
-  title        = {{ARIS}: Free-Form {VLM}-Guided Synthetic Data
-                  Construction for View-Controlled Image Editing},
+<pre>@misc{dataevolver2026,
+  title        = {{DataEvolver}: Let Your Data Build and Improve
+                  Itself via Goal-Driven Loop Agents},
   author       = {Zhang, Qisong and Wu, Wenzhuo},
   year         = {2026},
   howpublished = {\url{https://github.com/Kamisato520/DataEvolver}},
@@ -854,11 +854,11 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
   <div class="footer-inner">
     <ul class="footer-links">
       <li><a href="https://github.com/Kamisato520/DataEvolver" target="_blank" rel="noopener">GitHub</a></li>
-      <li><a href="paper/ARIS_technical_report.pdf">Paper (PDF)</a></li>
+      <li><a href="paper/DataEvolver_technical_report.pdf">Paper (PDF)</a></li>
       <li><a href="https://github.com/Kamisato520/DataEvolver/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a></li>
       <li><a href="https://github.com/Kamisato520/DataEvolver/blob/main/LICENSE" target="_blank" rel="noopener">License</a></li>
     </ul>
-    <p class="footer-text">ARIS — Autonomous Rendering with Iterative Scene-aware feedback &copy; 2026</p>
+    <p class="footer-text">DataEvolver — Let Your Data Build and Improve Itself via Goal-Driven Loop Agents &copy; 2026</p>
   </div>
 </footer>
 
