@@ -613,7 +613,7 @@ code{
     <div class="card-grid" style="margin-top:40px">
       <div class="card">
         <h3 class="card-title">Anti-Oscillation Control</h3>
-        <p class="card-desc">Sign-flip tracking (freeze after 3 flips), dead-zone detection, and step-scale scheduling (Round 0: 100%, Round 1: 70%, Round 2+: 50%) prevent infinite loops and parameter thrashing.</p>
+        <p class="card-desc">Sign-flip tracking (freeze after 3 flips), dead-zone detection, and step-scale scheduling (Round 0: 100%, Round 1: 70%, Round 2: 50%, Round 3+: 40%, with score-adaptive ×1.2 boost when hybrid_score &lt; 0.65) prevent infinite loops and parameter thrashing.</p>
       </div>
       <div class="card">
         <h3 class="card-title">Scene-Aware Rendering</h3>
@@ -621,7 +621,7 @@ code{
       </div>
       <div class="card">
         <h3 class="card-title">24 Atomic Actions</h3>
-        <p class="card-desc">Structured action space covering lighting (key/fill/rim intensity & rotation), object placement (yaw, elevation, scale), material properties (roughness, metallic, specular), and scene parameters.</p>
+        <p class="card-desc">Structured action space across 5 groups: lighting (key intensity & yaw), object (elevation, yaw, scale), scene (env rotation, env intensity, contact shadow), and material (saturation, value, hue, roughness, specular/sheen).</p>
       </div>
     </div>
   </div>
@@ -691,31 +691,31 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
     <div class="card-grid">
       <div class="card">
         <h4>Key Light Intensity</h4>
-        <p class="card-desc">±0.15 step, bounded [0.05, 3.0]</p>
+        <p class="card-desc">×1.2 / ×0.8 multiplicative, bounded [0.5, 2.0]</p>
       </div>
       <div class="card">
         <h4>Key Light Rotation (Yaw)</h4>
-        <p class="card-desc">±15° step relative to current</p>
+        <p class="card-desc">±15° step, bounded [-90°, 90°]</p>
       </div>
       <div class="card">
-        <h4>Fill Light Intensity</h4>
-        <p class="card-desc">±0.10 step, bounded [0.0, 2.0]</p>
+        <h4>Env Light Intensity</h4>
+        <p class="card-desc">×1.2 / ×0.8 multiplicative, bounded [0.5, 2.0]</p>
       </div>
       <div class="card">
         <h4>Env Rotation (Z)</h4>
-        <p class="card-desc">±10° step, bounded [-180°, 180°]</p>
+        <p class="card-desc">±30° step, bounded [-180°, 180°]</p>
       </div>
       <div class="card">
         <h4>Object Elevation</h4>
-        <p class="card-desc">±0.02 step, bounded [-0.15, 0.15]</p>
+        <p class="card-desc">±0.02 step, bounded [-0.1, 0.1]</p>
       </div>
       <div class="card">
         <h4>Material Roughness</h4>
-        <p class="card-desc">±0.10 step, bounded [0.05, 1.0]</p>
+        <p class="card-desc">±0.08 step, bounded [-0.3, 0.6]</p>
       </div>
     </div>
     <p style="text-align:center;margin-top:20px;font-size:0.8125rem;color:var(--text-tertiary)">
-      + 18 more actions covering specular, metallic, camera FOV, shadow softness, rim light, key light elevation, object scale, scene light scale, and more — see <a href="https://github.com/Kamisato520/DataEvolver/blob/main/configs/scene_action_space.json" target="_blank" rel="noopener">scene_action_space.json</a>
+      + 18 more actions covering object yaw, object scale, contact shadow, color saturation, value/brightness, hue offset, specular/sheen, and more — see <a href="https://github.com/Kamisato520/DataEvolver/blob/main/configs/scene_action_space.json" target="_blank" rel="noopener">scene_action_space.json</a>
     </p>
   </div>
 </section>
