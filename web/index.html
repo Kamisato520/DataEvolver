@@ -395,6 +395,118 @@ code{
 .footer-links a:hover{color:var(--text-primary)}
 .footer-text{font-size:0.8125rem;color:var(--text-tertiary)}
 
+/* ===== Gallery (Horizontal Scroll) ===== */
+.gallery-scroll-wrapper{
+  position:relative;
+  margin:0 -24px;
+  padding:0 24px;
+}
+.gallery-scroll{
+  display:flex;
+  gap:20px;
+  overflow-x:auto;
+  scroll-behavior:smooth;
+  scroll-snap-type:x mandatory;
+  padding:20px 0 32px;
+  -ms-overflow-style:none;
+  scrollbar-width:none;
+}
+.gallery-scroll::-webkit-scrollbar{display:none}
+.gallery-card{
+  flex:0 0 320px;
+  scroll-snap-align:start;
+  background:var(--bg-surface);border:1px solid var(--border);
+  border-radius:var(--radius-lg);overflow:hidden;
+  transition:all var(--transition);box-shadow:var(--shadow-card);
+}
+.gallery-card:hover{
+  border-color:var(--color-primary);
+  box-shadow:var(--shadow-card-hover);
+  transform:translateY(-4px);
+}
+.gallery-card img{
+  width:100%;aspect-ratio:1;object-fit:cover;display:block;cursor:pointer;
+}
+.gallery-card .gallery-info{padding:16px 20px}
+.gallery-tag{
+  display:inline-block;font-size:0.6875rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.08em;
+  padding:3px 10px;border-radius:4px;
+  background:rgba(30,64,175,0.08);color:var(--color-primary);
+  margin-bottom:8px;font-family:var(--font-mono);
+}
+.gallery-obj-name{font-family:var(--font-heading);font-weight:600;font-size:1rem}
+.gallery-meta{font-size:0.78rem;color:var(--text-tertiary);margin-top:4px}
+
+/* Gallery scroll controls */
+.gallery-scroll-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:10;width:44px;height:44px;
+  border-radius:50%;border:1px solid var(--border);
+  background:rgba(255,255,255,0.92);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  box-shadow:0 2px 12px rgba(0,0,0,0.1);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--text-primary);font-size:1.25rem;
+  transition:all var(--transition);
+}
+.gallery-scroll-btn:hover{
+  background:var(--color-primary);color:#fff;
+  box-shadow:var(--shadow-btn);
+}
+.gallery-scroll-btn.left{left:8px}
+.gallery-scroll-btn.right{right:8px}
+.gallery-scroll-indicator{
+  display:flex;justify-content:center;gap:6px;margin-top:4px;
+}
+.gallery-scroll-indicator .dot{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--border-accent);
+  transition:all var(--transition);
+}
+.gallery-scroll-indicator .dot.active{
+  background:var(--color-primary);width:24px;border-radius:4px;
+}
+
+/* ===== Rotation Strip ===== */
+.rotation-block{margin-bottom:40px}
+.rotation-block:last-child{margin-bottom:0}
+.rotation-block h3{
+  font-family:var(--font-heading);font-size:1.1rem;font-weight:600;margin-bottom:16px;
+}
+.rotation-strip{
+  display:grid;grid-template-columns:repeat(8,1fr);gap:8px;
+}
+.rotation-strip img{
+  width:100%;aspect-ratio:1;object-fit:cover;
+  border-radius:var(--radius-sm);border:1px solid var(--border);
+  cursor:pointer;transition:all var(--transition);
+}
+.rotation-strip img:hover{
+  border-color:var(--color-primary);transform:scale(1.04);
+  box-shadow:var(--shadow-card-hover);
+}
+.yaw-labels{
+  display:grid;grid-template-columns:repeat(8,1fr);gap:8px;margin-top:6px;
+}
+.yaw-labels span{
+  text-align:center;font-size:0.6875rem;color:var(--text-tertiary);
+  font-family:var(--font-mono);
+}
+
+/* ===== Lightbox ===== */
+.lightbox-overlay{
+  display:none;position:fixed;inset:0;z-index:2000;
+  background:rgba(0,0,0,0.88);
+  justify-content:center;align-items:center;cursor:zoom-out;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+}
+.lightbox-overlay.open{display:flex}
+.lightbox-overlay img{
+  max-width:92vw;max-height:92vh;border-radius:var(--radius-md);
+  box-shadow:0 8px 48px rgba(0,0,0,0.5);
+}
+
 /* ===== Responsive ===== */
 @media(max-width:768px){
   .nav-links{display:none}
@@ -406,6 +518,10 @@ code{
   .loop-arrow{display:none}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .card-grid{grid-template-columns:1fr}
+  .gallery-card{flex:0 0 280px}
+  .gallery-scroll-btn{display:none}
+  .rotation-strip{grid-template-columns:repeat(4,1fr)}
+  .yaw-labels{grid-template-columns:repeat(4,1fr)}
 }
 @media(max-width:480px){
   .hero-actions{flex-direction:column}
@@ -426,6 +542,7 @@ code{
       <li><a href="#pipeline">Pipeline</a></li>
       <li><a href="#evolution">VLM Loop</a></li>
       <li><a href="#dataset">Dataset</a></li>
+      <li><a href="#gallery">Gallery</a></li>
       <li><a href="#start">Get Started</a></li>
     </ul>
     <a href="https://github.com/Kamisato520/DataEvolver" class="nav-cta" target="_blank" rel="noopener">View on GitHub</a>
@@ -679,6 +796,222 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
   </div>
 </section>
 
+<!-- Rendering Gallery -->
+<section class="section" id="gallery" style="background:var(--bg-primary)">
+  <div class="section-inner">
+    <div class="section-label">Gallery</div>
+    <h2 class="section-title">Scene-Aware Rendering Showcase</h2>
+    <p class="section-desc">
+      Best VLM-gated renders across 7 diverse Blender scenes. Each object is automatically placed, lit, and iteratively refined by goal-driven loop agents until quality standards are met.
+    </p>
+
+    <div class="gallery-scroll-wrapper">
+      <button class="gallery-scroll-btn left" onclick="scrollGallery(-1)" aria-label="Scroll left">&#8249;</button>
+      <button class="gallery-scroll-btn right" onclick="scrollGallery(1)" aria-label="Scroll right">&#8250;</button>
+      <div class="gallery-scroll" id="galleryScroll">
+
+      <!-- ── Indoor (4.blend) ── -->
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1539_indoor4_v1.jpg" alt="Cordless Screwdriver" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Indoor (4.blend)</span>
+          <div class="gallery-obj-name">Cordless Screwdriver</div>
+          <div class="gallery-meta">obj_1539 &middot; score 0.623 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1560_indoor4_v1.jpg" alt="Nightstand" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Indoor (4.blend)</span>
+          <div class="gallery-obj-name">Nightstand</div>
+          <div class="gallery-meta">obj_1560 &middot; score 0.609 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1575_indoor4_best.jpg" alt="Folding Table" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Indoor (4.blend)</span>
+          <div class="gallery-obj-name">Folding Table</div>
+          <div class="gallery-meta">obj_1575 &middot; score 0.471 &middot; Round 1</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1530_indoor4_v1.jpg" alt="Pickup Truck" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Indoor (4.blend)</span>
+          <div class="gallery-obj-name">Pickup Truck</div>
+          <div class="gallery-meta">obj_1530 &middot; score 0.592 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <!-- ── Outdoor 7 — Desert Highway ── -->
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1552_outdoor7_v1.jpg" alt="Toaster Oven" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 7 &mdash; Desert Highway</span>
+          <div class="gallery-obj-name">Toaster Oven</div>
+          <div class="gallery-meta">obj_1552 &middot; score 0.578 &middot; Round 2</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1531_outdoor7_v1.jpg" alt="Table Lamp" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 7 &mdash; Desert Highway</span>
+          <div class="gallery-obj-name">Table Lamp</div>
+          <div class="gallery-meta">obj_1531 &middot; score 0.477 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <!-- ── Outdoor 9 — Coastal Bridge ── -->
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1528_outdoor9_v1.jpg" alt="Park Bench" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 9 &mdash; Coastal Bridge</span>
+          <div class="gallery-obj-name">Park Bench</div>
+          <div class="gallery-meta">obj_1528 &middot; score 0.574 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1549_outdoor9_v1.jpg" alt="Parking Meter" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 9 &mdash; Coastal Bridge</span>
+          <div class="gallery-obj-name">Parking Meter</div>
+          <div class="gallery-meta">obj_1549 &middot; score 0.564 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1506_indoor4_v0.jpg" alt="Sledgehammer" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 9 &mdash; Coastal Bridge</span>
+          <div class="gallery-obj-name">Sledgehammer</div>
+          <div class="gallery-meta">obj_1506 &middot; score 0.577 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1511_indoor4_v0.jpg" alt="Rocking Chair" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 9 &mdash; Coastal Bridge</span>
+          <div class="gallery-obj-name">Rocking Chair</div>
+          <div class="gallery-meta">obj_1511 &middot; score 0.576 &middot; Round 3</div>
+        </div>
+      </div>
+
+      <!-- ── Outdoor 11 — Industrial Yard ── -->
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1546_outdoor11_v1.jpg" alt="Retro Telephone" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 11 &mdash; Industrial Yard</span>
+          <div class="gallery-obj-name">Retro Telephone</div>
+          <div class="gallery-meta">obj_1546 &middot; score 0.591 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1567_outdoor11_v1.jpg" alt="Concrete Barrier" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 11 &mdash; Industrial Yard</span>
+          <div class="gallery-obj-name">Concrete Barrier</div>
+          <div class="gallery-meta">obj_1567 &middot; score 0.565 &middot; Round 2</div>
+        </div>
+      </div>
+
+      <!-- ── Outdoor 13 — Neon Wetland ── -->
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1564_outdoor13_v1.jpg" alt="Espresso Machine" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 13 &mdash; Neon Wetland</span>
+          <div class="gallery-obj-name">Espresso Machine</div>
+          <div class="gallery-meta">obj_1564 &middot; score 0.552 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1543_outdoor13_v1.jpg" alt="Traffic Cone" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 13 &mdash; Neon Wetland</span>
+          <div class="gallery-obj-name">Traffic Cone</div>
+          <div class="gallery-meta">obj_1543 &middot; score 0.518 &middot; Round 1</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1578_outdoor13_best.jpg" alt="Electric Drill" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 13 &mdash; Neon Wetland</span>
+          <div class="gallery-obj-name">Electric Drill</div>
+          <div class="gallery-meta">obj_1578 &middot; score 0.447 &middot; Round 2</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1536_indoor4_v1.jpg" alt="Cement Mixer Truck" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 13 &mdash; Neon Wetland</span>
+          <div class="gallery-obj-name">Cement Mixer Truck</div>
+          <div class="gallery-meta">obj_1536 &middot; score 0.600 &middot; Round 1</div>
+        </div>
+      </div>
+
+      <!-- ── Outdoor 15 — Misty Forest ── -->
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1534_outdoor15_v1.jpg" alt="Desk Stapler" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 15 &mdash; Misty Forest</span>
+          <div class="gallery-obj-name">Desk Stapler</div>
+          <div class="gallery-meta">obj_1534 &middot; score 0.601 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1569_outdoor15_best.jpg" alt="Ceramic Teapot" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 15 &mdash; Misty Forest</span>
+          <div class="gallery-obj-name">Ceramic Teapot</div>
+          <div class="gallery-meta">obj_1569 &middot; score 0.572 &middot; Round 2</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1555_outdoor15_v1.jpg" alt="Street Bench" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 15 &mdash; Misty Forest</span>
+          <div class="gallery-obj-name">Street Bench</div>
+          <div class="gallery-meta">obj_1555 &middot; score 0.523 &middot; Round 2</div>
+        </div>
+      </div>
+
+      <!-- ── Outdoor 16 — Urban Concrete ── -->
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1572_outdoor16_best.jpg" alt="Rolling Office Chair" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 16 &mdash; Urban Concrete</span>
+          <div class="gallery-obj-name">Rolling Office Chair</div>
+          <div class="gallery-meta">obj_1572 &middot; score 0.549 &middot; Round 0</div>
+        </div>
+      </div>
+
+      <div class="gallery-card">
+        <img src="images/gallery/obj_1558_outdoor16_v1.jpg" alt="Sewing Machine" onclick="openLightbox(this)">
+        <div class="gallery-info">
+          <span class="gallery-tag">Outdoor 16 &mdash; Urban Concrete</span>
+          <div class="gallery-obj-name">Sewing Machine</div>
+          <div class="gallery-meta">obj_1558 &middot; score 0.567 &middot; Round 2</div>
+        </div>
+      </div>
+
+    </div><!-- gallery-scroll -->
+    <div class="gallery-scroll-indicator" id="galleryIndicator"></div>
+    </div><!-- gallery-scroll-wrapper -->
+  </div>
+</section>
+
 <!-- Action Space -->
 <section class="section" style="background:var(--bg-primary)">
   <div class="section-inner">
@@ -861,6 +1194,99 @@ instruction = row[<span style="color:var(--color-success)">"instruction"</span>]
     <p class="footer-text">DataEvolver — Let Your Data Build and Improve Itself via Goal-Driven Loop Agents &copy; 2026</p>
   </div>
 </footer>
+
+<!-- Lightbox -->
+<div class="lightbox-overlay" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+function openLightbox(img){
+  document.getElementById('lightbox-img').src=img.src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeLightbox();});
+
+/* Gallery horizontal scroll */
+function scrollGallery(dir){
+  var el=document.getElementById('galleryScroll');
+  if(!el)return;
+  var cardW=el.querySelector('.gallery-card');
+  var step=cardW?(cardW.offsetWidth+20)*2:680;
+  el.scrollBy({left:dir*step,behavior:'smooth'});
+}
+
+(function(){
+  var scroll=document.getElementById('galleryScroll');
+  var indicator=document.getElementById('galleryIndicator');
+  if(!scroll||!indicator)return;
+
+  function buildDots(){
+    var cards=scroll.querySelectorAll('.gallery-card');
+    var visibleW=scroll.clientWidth;
+    var cardW=cards[0]?cards[0].offsetWidth+20:340;
+    var perPage=Math.max(1,Math.floor(visibleW/cardW));
+    var pages=Math.ceil(cards.length/perPage);
+    indicator.innerHTML='';
+    for(var i=0;i<pages;i++){
+      var d=document.createElement('span');
+      d.className='dot'+(i===0?' active':'');
+      indicator.appendChild(d);
+    }
+    return{perPage:perPage,pages:pages};
+  }
+
+  function updateDots(){
+    var cards=scroll.querySelectorAll('.gallery-card');
+    var visibleW=scroll.clientWidth;
+    var cardW=cards[0]?cards[0].offsetWidth+20:340;
+    var perPage=Math.max(1,Math.floor(visibleW/cardW));
+    var pages=Math.ceil(cards.length/perPage);
+    var currentPage=Math.round(scroll.scrollLeft/(cardW*perPage));
+    currentPage=Math.min(currentPage,pages-1);
+    var dots=indicator.querySelectorAll('.dot');
+    dots.forEach(function(d,i){
+      d.className=i===currentPage?'dot active':'dot';
+    });
+  }
+
+  buildDots();
+  scroll.addEventListener('scroll',updateDots);
+  window.addEventListener('resize',function(){buildDots();updateDots();});
+
+  /* keyboard navigation */
+  document.addEventListener('keydown',function(e){
+    var rect=scroll.getBoundingClientRect();
+    var inView=rect.top<window.innerHeight&&rect.bottom>0;
+    if(!inView)return;
+    if(e.key==='ArrowLeft')scrollGallery(-1);
+    if(e.key==='ArrowRight')scrollGallery(1);
+  });
+
+  /* auto-scroll animation */
+  var autoScrollTimer;
+  var paused=false;
+  function startAutoScroll(){
+    autoScrollTimer=setInterval(function(){
+      if(paused)return;
+      var maxScroll=scroll.scrollWidth-scroll.clientWidth;
+      if(scroll.scrollLeft>=maxScroll-10){
+        scroll.scrollTo({left:0,behavior:'smooth'});
+      }else{
+        scrollGallery(1);
+      }
+    },4000);
+  }
+  scroll.addEventListener('mouseenter',function(){paused=true;});
+  scroll.addEventListener('mouseleave',function(){paused=false;});
+  scroll.addEventListener('touchstart',function(){paused=true;});
+  scroll.addEventListener('touchend',function(){setTimeout(function(){paused=false;},3000);});
+  startAutoScroll();
+})();
+</script>
 
 </body>
 </html>
