@@ -78,11 +78,11 @@ Follow these scheduling rules:
 - Do not commit user-specific GPU choices such as concrete card ranges, service reservations, or host process state to the public repo. Store them only in ignored `.dataevolver/local/` profiles or user memory.
 - Do not kill existing vLLM/VLM services during onboarding. Record them as reservations unless the user explicitly authorizes restart outside the dry-run flow.
 - If the user asks for real installation, downloads, service restarts, or GPU execution, first use the dry-run output as the plan and ask for explicit confirmation.
-- Prefer `uvx --from huggingface_hub hf download ...` for printed Hugging Face download plans, with `hf download ...` as fallback. Do not execute either command in dry-run.
+- Prefer `uvx --from huggingface_hub hf download ...` for printed Hugging Face download plans, with `hf download ...` as fallback. For slow networks, mention the `HF_ENDPOINT=https://hf-mirror.com` mirror and its `hfd` downloader (details in AGENT_SETUP.md). Do not execute any download command in dry-run.
 - For `blender_mcp`, do not write the user's global Codex config automatically. Generate `.dataevolver/local/blender_mcp.codex.toml` and ask the user to review/copy it.
 - For `blender_mcp`, do not start remote Blender or install remote system packages during onboarding. Print preflight/start commands only unless the user explicitly asks for real setup outside the dry-run flow.
 
-## Known V1 Requirements
+## Known Requirements Before Real Setup
 
 - Source or export environment-variable overrides before real one-click setup runs the `dataevolver.workflows.stages` modules:
   `QWEN_IMAGE_MODEL_PATH`, `SAM3_CKPT`, `SAM3_DIR`, `HUNYUAN3D_REPO`, `MODEL_HUB`, `PAINT_MODEL_HUB`, `DINO_MODEL_PATH`, `REALESRGAN_CKPT`, and `VLM_MODEL_PATH`.
@@ -104,7 +104,7 @@ Follow these scheduling rules:
 - Tooling status, server preflight summary, and missing commands.
 - GPU policy, included/reserved GPUs, and dry-run GPU shard plan.
 - Hugging Face gated/access-dependent repos.
-- Runtime path override plan for v1.
+- Runtime path override plan for real setup.
 - Timing/GPU/failure ledger requirements when applicable.
 - Optional operator configuration such as `operators.blender_mcp` when the selected route is `blender_mcp`.
 - Next actions for the main agent.
@@ -117,6 +117,6 @@ Follow these scheduling rules:
 - `gpu_policy`, `include_gpus`, `reserve_gpus`, `gpu_plan`
 - `execution_mode`, `paper_validation`, `ledger_requirements`
 - `operators.blender_mcp` for the `blender_mcp` profile, including `enabled`, `connection_mode`, `ssh_alias`, `remote_root`, `remote_blender_bin`, `remote_addon_dir`, `remote_port`, `remote_uvx`, `tmux_session`, and `codex_mcp_server_name`
-- `path_override_plan`, `v1_blockers`, `next_actions`, `generated_at`
+- `path_override_plan`, `real_setup_blockers`, `next_actions`, `generated_at`
 
 Keep both files concise. Use `unknown`, `not_requested`, or `needs_check` instead of blocking onboarding when the user is unsure.

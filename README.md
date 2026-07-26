@@ -111,10 +111,31 @@ The core innovation: a **goal-driven loop agent** that iteratively improves rend
 
 ## Quick Start
 
-Start with the lightweight onboarding dry-run. It checks the shape of your
-environment, prints the setup, model download, and GPU policy plan, and writes local
-non-sensitive config files. It does **not** install dependencies, download model
-weights, write tokens, kill services, or launch GPU jobs.
+### Option A: Let your AI agent set it up (recommended)
+
+If you already have **Claude Code** or **Codex** installed, clone this repo,
+open it with your agent, and say:
+
+> 请阅读 AGENT_SETUP.md 并帮我完成所有配置
+>
+> *"Read AGENT_SETUP.md and complete the setup for me."*
+
+The agent will probe your GPUs and disk, show you the model download bill
+(~120 GB for the default set), and — only after your confirmation — set up
+the Python environment, model weights, and Blender, then verify everything
+with a single-object smoke run. Model downloads default to the
+hf-mirror.com mirror with the resumable `hfd` downloader. You only need
+**Linux, an NVIDIA GPU (24 GB+ VRAM), git, and Python 3.10+** pre-installed.
+
+### Option B: Manual setup
+
+Follow the steps below yourself. Start with the lightweight onboarding
+dry-run — it checks the shape of your environment, prints the setup, model
+download, and GPU policy plan, and writes local non-sensitive config files.
+It does **not** install dependencies, download model weights, write tokens,
+kill services, or launch GPU jobs. [AGENT_SETUP.md](AGENT_SETUP.md) doubles
+as the reference for the full execution order
+(probe → plan → confirm → execute → verify).
 
 ### 1. Clone the repository
 
