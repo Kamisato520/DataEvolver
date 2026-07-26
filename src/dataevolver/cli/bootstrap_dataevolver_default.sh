@@ -32,7 +32,7 @@ usage() {
 Usage:
   bash src/dataevolver/cli/bootstrap_dataevolver_default.sh [options]
 
-Dry-run only v0 demo. This script prints DataEvolver setup, install, model
+Dry-run only demo. This script prints DataEvolver setup, install, model
 download, and config plans. It does not install dependencies, download model
 weights, write tokens, or launch long-running jobs.
 
@@ -135,7 +135,7 @@ case "$GPU_POLICY" in
 esac
 
 if [[ "$DRY_RUN" != "1" ]]; then
-  die "v0 is dry-run only"
+  die "this script is dry-run only"
 fi
 
 WORKSPACE_ROOT="$(cd "$WORKSPACE_ROOT" 2>/dev/null && pwd || printf '%s' "$WORKSPACE_ROOT")"
@@ -278,7 +278,7 @@ print_gpu_plan() {
 print_env_plan() {
   section "env plan"
   if [[ "$PROFILE" == "blender_mcp" ]]; then
-    printf 'Blender MCP operator profile: no Python model environment will be installed in dry-run v0.\n'
+    printf 'Blender MCP operator profile: no Python model environment will be installed in dry-run.\n'
     printf 'Remote Blender must run as a non-background GUI process, usually under Xvfb on headless servers.\n\n'
     printf 'Remote operator environment variables to review:\n'
     printf '  DATAEVOLVER_BLENDER_MCP_REMOTE=%s\n' "$BLENDER_MCP_REMOTE"
@@ -373,7 +373,7 @@ print_model_plan() {
     return
   fi
   if [[ "$PROFILE" == "custom" ]]; then
-    printf 'custom profile: no default model downloads planned in v0.\n'
+    printf 'custom profile: no default model downloads planned.\n'
     printf 'Record replacement models as custom_models with status=needs_check in env.config.json.\n'
     return
   fi
@@ -382,8 +382,9 @@ print_model_plan() {
     return
   fi
 
-  printf 'All commands below are printed only; they are not executed in v0.\n'
-  printf 'HF token policy: set HF_TOKEN in the shell for real downloads; never write it to project files.\n\n'
+  printf 'All commands below are printed only; this script does not execute them.\n'
+  printf 'HF token policy: set HF_TOKEN in the shell for real downloads; never write it to project files.\n'
+  printf 'Mirror route: if huggingface.co is slow or unreachable, export HF_ENDPOINT=https://hf-mirror.com and use the hfd downloader (see AGENT_SETUP.md).\n\n'
   printf 'Access checks before real downloads (printed only):\n'
   printf '  test -n "${HF_TOKEN:-}" || echo "HF_TOKEN is not set"\n'
   printf '  uvx --from huggingface_hub hf auth whoami || hf auth whoami\n'
@@ -762,7 +763,7 @@ payload = {
     "gpu_plan": gpu_plan,
     "ledger_requirements": ledger_requirements,
     "path_override_plan": path_override_plan,
-    "v1_blockers": [
+    "real_setup_blockers": [
         "Source or export the path override variables before running the pipeline on a new host.",
         "Keep SAM3 and Hunyuan3D source checkouts separate from downloaded weight directories.",
         "Install SAM3 and Hunyuan3D repo-specific dependencies after target-host preflight.",
